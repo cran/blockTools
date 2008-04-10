@@ -12,7 +12,7 @@
 block(data, vcov.data = NULL, groups = NULL, n.tr = 2, id.vars,
   block.vars = NULL, algorithm = "optGreedy", distance = "mahalanobis",
   row.sort = NULL, level.two = FALSE, valid.var = NULL,
-  valid.range = NULL, seed, verbose = TRUE, ...)
+  valid.range = NULL, seed, verbose = FALSE, ...)
 }
 
 \arguments{
@@ -72,7 +72,7 @@ algorithms proceed similarly.
 
 An example of \code{id.vars} is \code{id.vars = c("id", "id2")}.  If
 two-level blocking is selected, \code{id.vars} should be ordered ({\it
-  $\langle$ unit id $\rangle$, $\langle$ subunit id $\rangle$}).  See
+  $\langle$unit id$\rangle$, $\langle$subunit id$\rangle$}).  See
 details for \code{level.two} below for more information.
 
 If \code{block.vars = NULL}, then all variables in \code{data} except
@@ -93,7 +93,9 @@ the minimum-distance matches to the particular unit in question.
 
 The \code{distance = "mcd"} and \code{distance = "mve"} options call
 \code{cov.rob} to calculate measures of multivariate spread robust to
-outliers.
+outliers.  The \code{distance = "mcd"} option calculates the Minimum
+Covariance Determinant estimate; the \code{distance = "mve"} option
+calculates the Minimum Volume Ellipsoid estimate.
 
 A user-specified distance matrix must have diagonals equal to 0,
 indicating zero distance between a unit and itself.  Only the lower
@@ -113,7 +115,7 @@ block be at least 10 units apart, but no more than 50 units apart, on
 variable {\tt "b2"}.
 }
 
-\value{ A list with elements \itemize{
+\value{ A list with elements
   \item{blocks}{a list of dataframes, each containing a group's blocked
     units.  If there are two treatment conditions, then the last column
     of each dataframe displays the multivariate distance between the two
@@ -122,7 +124,7 @@ variable {\tt "b2"}.
      multivariate distances between all possible pairs in the block.}
   \item{level.two}{a logical indicating whether \code{level.two =
       TRUE}.}
-  }
+  \item{call}{the orginal call to \code{block}.}
 }
 
 \references{
@@ -137,7 +139,7 @@ Management} 26(3):  479-509.
 
 \author{Ryan T. Moore}
 
-\seealso{\code{\link{assignment}},\code{\link{diagnose}}}
+\seealso{\code{\link{assignment}}, \code{\link{diagnose}}}
 
 \examples{
 data(x100)

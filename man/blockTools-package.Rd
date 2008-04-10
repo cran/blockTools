@@ -2,7 +2,7 @@
 \alias{blockTools-package}
 \alias{blockTools}
 \docType{package}
-\title{Block, randomly assign, and diagnose potential problems between units in randomized experiments}
+\title{Block, randomly assign, and diagnose potential interference in randomized experiments}
 \description{Block units into experimental blocks, with one unit per
 treatment condition, by creating a measure of multivariate distance
 between all possible pairs of units.  Maximum, minimum, or an
@@ -15,8 +15,8 @@ treatment conditions. Write outputs to .tex and .csv files.
 \tabular{ll}{
 Package: \tab blockTools\cr
 Type: \tab Package\cr
-Version: \tab 0.1\cr
-Date: \tab 2007-08-24\cr
+Version: \tab 0.2\cr
+Date: \tab 2007-04-10\cr
 License: \tab  GNU GPL Version 2 (or later)\cr
 }
 Given raw data, \code{block} creates experimental blocks,

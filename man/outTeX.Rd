@@ -14,7 +14,7 @@ outTeX(block.obj, namesCol = NULL, digits = 2, ...)
     output files.}
   \item{digits}{the number of digits to which to round multivariate
     distances in output files.}
-  \item{\dots}{additional arguments passed to \code{write.tex}.}
+  \item{\dots}{additional arguments passed to \code{xtable}.}
 }
 
 \value{

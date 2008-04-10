@@ -21,10 +21,12 @@ strings.  See documentation and respecify id.vars.")
   data.diag <- data[, (names(data) %in% c(id.vars, suspect.var))]  
 
   lev <- length(id.vars)
-  
-  for(i in 1:length(object)){  
+
+####  for(i in 1:length(object)){  
+  for(i in 1:length(object$assg)){  
     ## assignment object
-    assg.gp <- object[[i]]
+    ####assg.gp <- object[[i]]
+    assg.gp <- as.matrix(object$assg[[i]])
     ## data from group
     data.gp <- data.diag[data.diag[,id.vars[lev]] %in%
                          as.matrix(assg.gp),]
@@ -51,10 +53,10 @@ strings.  See documentation and respecify id.vars.")
       tmp.na <- array(NA)
 
       for(k in 1:nrow(storage)){
-        col1 <- ceiling(which(object[[i]] ==
-                              storage[k,1])/nrow(object[[i]]))
-        col2 <- ceiling(which(object[[i]] ==
-                              storage[k,(lev+1)])/nrow(object[[i]]))
+        col1 <- ceiling(which(object$assg[[i]] ==
+                              storage[k,1])/nrow(object$assg[[i]]))
+        col2 <- ceiling(which(object$assg[[i]] ==
+                              storage[k,(lev+1)])/nrow(object$assg[[i]]))
         if(length(col1)==0 || length(col2)==0 || (col1==col2)){
           tmp.na <- append(tmp.na,k)
         }
@@ -109,16 +111,20 @@ strings.  See documentation and respecify id.vars.")
       ## name columns
       names(storage)[ncol(storage)] <- "Difference"
       reps <- floor(ncol(storage)/2)
-      names(storage)[1:(ncol(storage)-1)] <- rep(paste("Treatment ",
+      names(storage)[1:(ncol(storage)-1)] <- rep(paste("Unit ",
                                                  1:2, sep=""),
                                                  each=reps)
     }
 
-    gp.names[i] <- names(object)[i]
+    gp.names[i] <- names(object$assg)[i]
     out[[i]] <- storage
   }
 
   names(out) <- gp.names
-  return(out)
+  output <- list(diagnose = out)
+  output$call <- match.call()
+  output$suspect.var <- suspect.var
+  output$suspect.range <- suspect.range
+  class(output) <- "diagnose"
+  return(output)
 }
-      

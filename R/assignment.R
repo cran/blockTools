@@ -61,5 +61,9 @@ assignment <- function(block.obj, seed = NULL, namesCol = NULL){
   }
 
   names(out) <- gp.names
-  return(out)
+
+  output <- list(assg = out)
+  output$call <- match.call()
+  class(output) <- "assg"
+  return(output)
 }

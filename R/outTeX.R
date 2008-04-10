@@ -4,6 +4,9 @@ outTeX <- function(block.obj, namesCol = NULL, digits = 2, ...){
   if(!is.null(block.obj$blocks)){ 
     block.obj <- block.obj$blocks
   }
+  if(!is.null(block.obj$assg)){ 
+    block.obj <- block.obj$assg
+  }
   
   for(i in 1:length(block.obj)){
     tab <- block.obj[[i]]

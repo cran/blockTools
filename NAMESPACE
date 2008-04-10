@@ -4,3 +4,9 @@ export( block,
         outCSV,
         outTeX
 )
+
+S3method(print, block)
+S3method(print, assg)
+S3method(print, diagnose)
+S3method(print, blockSum)
+

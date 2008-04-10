@@ -2,7 +2,7 @@ block <- function(data, vcov.data = NULL, groups = NULL, n.tr = 2, id.vars,
                   block.vars = NULL, algorithm = "optGreedy", distance =
                   "mahalanobis", row.sort = NULL, level.two = FALSE,
                   valid.var = NULL, valid.range = NULL, seed, verbose
-                  = TRUE, ...){ 
+                  = FALSE, ...){ 
 
   if(is.null(algorithm)){
     stop("Blocking algorithm is unspecified.  See documentation for
@@ -97,7 +97,7 @@ identification variable and re-block.")
       row.names(data.gp) <- data.gp[, id.vars[1]]  
     }
 
-    data.block <- data.gp[, !(names(data.gp) %in% id.vars)]
+    data.block <- data.frame(data.gp[, !(names(data.gp) %in% id.vars)])
 
     ## create distance matrix if not user specified
     if(is.character(distance)){
@@ -286,5 +286,8 @@ identification variable and re-block.")
   o <- order(names(out))
   out <- out[o]
 
-  return(list(blocks = out, level.two = level.two))
+  output <- list(blocks = out, level.two = level.two)
+  output$call <- match.call()  
+  class(output) <- "block"
+  return(output)
 }

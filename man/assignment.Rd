@@ -24,7 +24,8 @@ as columns.  \code{assignment} is designed to take a list with two
 elements.  The first element should be named {\tt \$blocks}, and should
 be a list of dataframes.  Each dataframe should have blocks as rows and
 treatment conditions as columns.  The second element should be a logical
-named {\tt \$level.two}.  
+named {\tt \$level.two}.  A third element, such as \code{$call} in a
+\code{block} output object, is currently ignored.
   
 Specifying the random seed yields constant assignment, and thus allows
 for easy replication of experimental protocols.
@@ -33,13 +34,15 @@ If \code{namesCol = NULL}, then ``Treatment 1", ``Treatment 2", \ldots are
 used.
 }
 
-\value{
-A list of dataframes, each containing a group's blocked units assigned
-to treatment conditions.  If there are two treatment conditions, then
-the last column of each dataframe displays the multivariate distance
-between the two units.  If there are more than two treatment conditions,
-then the last column of each dataframe displays the largest of the
-multivariate distances between all possible pairs in the block.  
+\value{A list with elements
+  \item{assg}{a list of dataframes, each containing a group's blocked
+    units assigned to treatment conditions.  If there are two treatment
+    conditions, then the last column of each dataframe displays the
+    multivariate distance between the two units.  If there are more than
+    two treatment conditions, then the last column of each dataframe
+    displays the largest of the multivariate distances between all
+    possible pairs in the block.}
+  \item{call}{the orginal call to \code{assignment}.}
 }
 
 \author{Ryan T. Moore}
@@ -54,8 +57,8 @@ out <- block(x100, groups = "g", n.tr = 2, id.vars = c("id"), block.vars
              "mahalanobis", level.two = FALSE, valid.var = "b1",
              valid.range = c(0,500), verbose = TRUE)
 ## Second, assign
-assg <- assignment(out, seed = 123)
-## assg contains 3 data frames
+assigned <- assignment(out, seed = 123)
+## assigned$assg contains 3 data frames
 }
 
 \keyword{design}

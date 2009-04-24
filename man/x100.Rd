@@ -5,10 +5,11 @@
 \description{Simulated data for demonstrating \code{blockTools} functionality.}
 \usage{data(x100)}
 
-\format{A dataframe with 100 rows and 6 columns.  Columns {\tt id} and
-  {\tt id2} are unit and subunit identifying variables, {\tt b1} and
-  {\tt b2} are blocking variables, {\tt g} identifies which of three
-  groups each unit is in (``a", ``b", or ``c"), and {\tt ig} is an ignored
+\format{A dataframe with 100 rows and 6 columns.  Columns \code{id} and
+  \code{id2} are unit and subunit identifying variables, \code{b1} and
+  \code{b2} are blocking variables, \code{g} identifies which of three
+  groups each unit is in (``a", ``b", or ``c"), and \code{ig} is an 
+ignored
   variable. 
 }
   

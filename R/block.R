@@ -1,6 +1,6 @@
 block <- function(data, vcov.data = NULL, groups = NULL, n.tr = 2, id.vars,
                   block.vars = NULL, algorithm = "optGreedy", distance =
-                  "mahalanobis", row.sort = NULL, level.two = FALSE,
+                  "mahalanobis", weight = NULL, row.sort = NULL, level.two = FALSE,
                   valid.var = NULL, valid.range = NULL, seed, verbose
                   = FALSE, ...){ 
 
@@ -51,6 +51,22 @@ the data.  Respecify 'row.sort'.")
       vc.all <- cov.rob(vcov.data, method="mve", seed = seed, ...)$cov
     }
   }
+
+  if(!is.null(weight)){  	
+  		if(is.vector(weight)){
+  			if(length(weight)!=ncol(vc.all)){
+  				stop("Weight vector length must be equal to number of blocking variables.  Respecify 'weight'.")
+  			} 		  		
+  		weight <- diag(weight)
+  		}
+  		if(is.matrix(weight)){
+  			if(sum(dim(weight)==dim(vc.all)) != 2){
+  				stop("Weight matrix dimensions must equal number of blocking variables.  Respecify 'weight'.")
+  			}
+  		}
+  		
+  	vc.all <- solve(t(solve(t(chol(vc.all))))%*%weight%*%solve(t(chol(vc.all))))
+  	}
 
   ## counter for groups
   gp <- 0

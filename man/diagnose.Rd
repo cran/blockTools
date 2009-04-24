@@ -40,7 +40,7 @@ An example of specified identifying variables is \code{id.vars = c("id",
 An example of specified suspect range is \code{suspect.var = "b2"},
 \code{suspect.range = c(0,50)} identifies all units assigned to
 different treatment conditions no more than 50 units apart on variable
-{\tt b2}. 
+\code{b2}. 
 }
 
 \value{

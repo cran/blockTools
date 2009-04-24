@@ -11,7 +11,7 @@
 \usage{
 block(data, vcov.data = NULL, groups = NULL, n.tr = 2, id.vars,
   block.vars = NULL, algorithm = "optGreedy", distance = "mahalanobis",
-  row.sort = NULL, level.two = FALSE, valid.var = NULL,
+  weight = NULL, row.sort = NULL, level.two = FALSE, valid.var = NULL,
   valid.range = NULL, seed, verbose = FALSE, ...)
 }
 
@@ -34,8 +34,12 @@ block(data, vcov.data = NULL, groups = NULL, n.tr = 2, id.vars,
   \item{distance}{either a) a string defining how the multivariate
     distance used for blocking is calculated (options include
     \code{"mahalanobis"}, \code{"mcd"}, and \code{"mve"}), or b) a
-    user-defined $k\times k$ matrix, where $k$ is the number of rows in
+    user-defined $k$-by-$k$ matrix, where $k$ is the number of rows 
+in
     \code{data}.}
+  \item{weight}{either a vector of length equal to the number of blocking 
+    variables or a square matrix with dimensions equal to the number of 
+    blocking variables used to explicitly weight blocking variables.}
   \item{row.sort}{an optional vector of integers from 1 to
     \code{nrow(data)} used to sort the rows of data when
     \code{algorithm = sortGreedy}.}
@@ -71,9 +75,9 @@ then the best match to any member of the triple, \ldots.  Other
 algorithms proceed similarly.
 
 An example of \code{id.vars} is \code{id.vars = c("id", "id2")}.  If
-two-level blocking is selected, \code{id.vars} should be ordered ({\it
-  $\langle$unit id$\rangle$, $\langle$subunit id$\rangle$}).  See
-details for \code{level.two} below for more information.
+two-level blocking is selected, \code{id.vars} should be ordered 
+(unit id, subunit id).  See details for \code{level.two} below for more 
+information.
 
 If \code{block.vars = NULL}, then all variables in \code{data} except
 the \code{id.vars} are taken as blocking variables.  E.g.,
@@ -101,18 +105,25 @@ A user-specified distance matrix must have diagonals equal to 0,
 indicating zero distance between a unit and itself.  Only the lower
 triangle of the matrix is used.
 
+If \code{weight} is a vector, then it is used as the diagonal of a square 
+weighting matrix with non-diagonal elements equal to zero.  The
+weighting is done by using as the Mahalanobis distance scaling matrix
+$((((chol(Sigma))')^\{-1\})'W((chol(Sigma))')^\{-1\})^\{-1\}$, where 
+$chol(Sigma)$ is the Cholesky decomposition of the usual variance-covariance 
+matrix and $W$ is the weighting matrix.  Differences should be smaller 
+on covariates given higher weights.
+
 If \code{level.two = TRUE}, then the best subunit block-matches in
 different units are found.  E.g., provinces could be matched based on
 the most similar cities within them.  All subunits in the data should
-have unique names.  Thus, if subunits are numbered 1 to {\it $\langle$
-  number of subunits in unit$\rangle$} within each unit, then they should
-be renumbered, e.g., 1 to {\it $\langle$ total number of 
-  subunits in all units$\rangle$}. 
+have unique names.  Thus, if subunits are numbered 1 to (number of 
+subunits in unit) within each unit, then they should
+be renumbered, e.g., 1 to (total number of subunits in all units). 
 
 An example of a variable restriction is \code{valid.var="b2"},
 \code{valid.range = c(10,50)}, which requires that units in the same
 block be at least 10 units apart, but no more than 50 units apart, on
-variable {\tt "b2"}.
+variable \code{"b2"}.
 }
 
 \value{ A list with elements

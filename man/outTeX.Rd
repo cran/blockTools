@@ -22,7 +22,7 @@ A set of .tex files, one for each element of the input list of blocked
 or assigned units.  Each file is named ``GroupXXX.tex", where ``XXX" is
 the group name taken from the input object.  The tables in these .tex
 files can easily be integrated into an existing .tex document using
-\LaTeX code \code{\include{GroupXXX}}.
+LaTeX code \code{\include{GroupXXX}}.
 }
 
 \author{Ryan T. Moore}

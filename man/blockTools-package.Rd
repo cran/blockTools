@@ -17,7 +17,7 @@ Package: \tab blockTools\cr
 Type: \tab Package\cr
 Version: \tab 0.2\cr
 Date: \tab 2007-04-10\cr
-License: \tab  GNU GPL Version 2 (or later)\cr
+License: \tab  GPL (>=2)\cr
 }
 Given raw data, \code{block} creates experimental blocks,
 \code{assignment} assigns units to treatment conditions, \code{diagnose}

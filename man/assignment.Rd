@@ -21,10 +21,11 @@
 \code{block.obj} can be specified directly by the user.  It can be a
 single dataframe or matrix with blocks as rows and treatment conditions
 as columns.  \code{assignment} is designed to take a list with two
-elements.  The first element should be named {\tt \$blocks}, and should
+elements.  The first element should be named \code{\$blocks}, and 
+should
 be a list of dataframes.  Each dataframe should have blocks as rows and
 treatment conditions as columns.  The second element should be a logical
-named {\tt \$level.two}.  A third element, such as \code{$call} in a
+named \code{\$level.two}.  A third element, such as \code{$call} in a
 \code{block} output object, is currently ignored.
   
 Specifying the random seed yields constant assignment, and thus allows

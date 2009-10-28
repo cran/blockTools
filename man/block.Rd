@@ -11,7 +11,7 @@
 \usage{
 block(data, vcov.data = NULL, groups = NULL, n.tr = 2, id.vars,
   block.vars = NULL, algorithm = "optGreedy", distance = "mahalanobis",
-  weight = NULL, row.sort = NULL, level.two = FALSE, valid.var = NULL,
+  weight = NULL, optfactor = 10^8, row.sort = NULL, level.two = FALSE, valid.var = NULL,
   valid.range = NULL, seed, verbose = FALSE, ...)
 }
 
@@ -28,7 +28,7 @@ block(data, vcov.data = NULL, groups = NULL, n.tr = 2, id.vars,
   \item{block.vars}{an optional string or vector of strings specifying which
     column(s) of \code{data} contain the blocking variables.}
   \item{algorithm}{a string specifying the blocking algorithm.
-    \code{"optGreedy"}, \code{"naiveGreedy"}, \code{"randGreedy"}, and
+    \code{"optGreedy"}, \code{"optimal"}, \code{"naiveGreedy"}, \code{"randGreedy"}, and
     \code{"sortGreedy"} algorithms are currently available.  See Details
     for more information.}
   \item{distance}{either a) a string defining how the multivariate
@@ -40,9 +40,10 @@ in
   \item{weight}{either a vector of length equal to the number of blocking 
     variables or a square matrix with dimensions equal to the number of 
     blocking variables used to explicitly weight blocking variables.}
+  \item{optfactor}{a number by which distances are multiplied then divided when \code{algorithm = "optimal"}.}
   \item{row.sort}{an optional vector of integers from 1 to
     \code{nrow(data)} used to sort the rows of data when
-    \code{algorithm = sortGreedy}.}
+    \code{algorithm = "sortGreedy"}.}
   \item{level.two}{a logical defining the level of blocking.}
   \item{valid.var}{an optional string defining a variable on which
     units in the same block must fall within the range defined by
@@ -62,7 +63,7 @@ variance-covariance matrix using the \code{block.vars} from
 \code{data}. 
 
 If \code{groups} is not user-specified, \code{block} temporarily creates
-a variable in \code{data} called \code{"groups"}, which takes the value
+a variable in \code{data} called \code{groups}, which takes the value
 1 for every unit.
 
 Where possible, one unit is assigned to each condition in each block.
@@ -83,17 +84,51 @@ If \code{block.vars = NULL}, then all variables in \code{data} except
 the \code{id.vars} are taken as blocking variables.  E.g.,
 \code{block.vars = c("b1", "b2")}. 
 
-\code{"optGreedy"} calls an optimal-greedy algorithm, sequentially
-finding the best match in the entire dataset; \code{"naiveGreedy"} finds
-the best match proceeding down the dataset from the first unit to the
-last; \code{"randGreedy"} randomly selects a unit, finds its best match,
-and repeats; \code{"sortGreedy"} resorts the dataset according to
-\code{row.sort}, then implements a \code{naiveGreedy} algorithm.
+The algorithm \code{optGreedy} calls an optimal-greedy algorithm, repeatedly
+finding the best remaining match in the entire dataset;
+\code{optimal} finds the set of blocks that minimes the sum of the
+distances in all blocks; \code{naiveGreedy} finds the best match
+proceeding down the dataset from the first unit to the last;
+\code{randGreedy} randomly selects a unit, finds its best match, and
+repeats; \code{sortGreedy} resorts the dataset according to
+\code{row.sort}, then implements the \code{naiveGreedy} algorithm.
   
 The \code{optGreedy} algorithm breaks ties by randomly selecting one of
 the minimum-distance pairs.  The \code{naiveGreedy}, \code{sortGreedy},
 and \code{randGreedy} algorithms break ties by randomly selecting one of
 the minimum-distance matches to the particular unit in question.
+
+The \code{optimal} algorithm uses two functions from the
+\pkg{nbpMatching} package: \code{distancematrix} prepares a distance
+matrix for optimal blocking, and \code{nonbimatch} performs the
+optimal blocking by minimizing the sum of distances in blocks.
+\code{nonbimatch}, and thus the \code{block} algorithm
+\code{optimal}, requires that \code{n.tr = 2}.
+
+Because \code{distancematrix} takes the integer \code{floor} of the
+distances, and one may want much finer precision, the multivariate
+distances calculated within \code{block} are multiplied by
+\code{optfactor} prior to optimal blocking.  Then
+\code{distancematrix} prepares the resulting distance matrix, and
+\code{nonbimatch} is called on the output.  The distances are then
+untransformed by dividing by \code{optfactor} before being returned by
+\code{block}.
+
+The choice of \code{optfactor} can determine whether the Fortran code
+can allocate enough memory to solve the optimization problem.  For
+example, blocking the first 14 units of \code{\link{x100}} by executing
+\code{block(x100[1:14, ], id.vars = "id", block.vars = c("b1", "b2"),
+algorithm = "optimal", optfactor = 10^8)} fails for Fortran memory
+reasons, while the same code with \code{optfactor = 10^5} runs
+successfully.  Smaller values of \code{optfactor} imply easier
+computation, but less precision.
+
+Most of the algorithms in \code{block} make prohibited blockings by
+using a distance of \code{Inf}.  However, the optimal algorithm calls
+\code{Fortran} code from \pkg{nbpMatching} and requires integers.
+Thus, a distance of \code{99999*max(dist.mat)} is used to effectively
+prohibit blockings.  This follows the procedure demonstrated in the
+example of \code{help(nonbimatch)}.
 
 The \code{distance = "mcd"} and \code{distance = "mve"} options call
 \code{cov.rob} to calculate measures of multivariate spread robust to
@@ -116,11 +151,12 @@ on covariates given higher weights.
 If \code{level.two = TRUE}, then the best subunit block-matches in
 different units are found.  E.g., provinces could be matched based on
 the most similar cities within them.  All subunits in the data should
-have unique names.  Thus, if subunits are numbered 1 to (number of 
-subunits in unit) within each unit, then they should
-be renumbered, e.g., 1 to (total number of subunits in all units). 
+have unique names.  Thus, if subunits are numbered 1 to (number of
+subunits in unit) within each unit, then they should be renumbered,
+e.g., 1 to (total number of subunits in all units).  \code{level.two}
+blocking is not currently implemented for \code{algorithm = "optimal"}.
 
-An example of a variable restriction is \code{valid.var="b2"},
+An example of a variable restriction is \code{valid.var = "b2"},
 \code{valid.range = c(10,50)}, which requires that units in the same
 block be at least 10 units apart, but no more than 50 units apart, on
 variable \code{"b2"}.

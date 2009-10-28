@@ -17,10 +17,10 @@ outCSV(block.obj, namesCol = NULL, digits = 2, ...)
   \item{\dots}{additional arguments passed to \code{write.csv}.}
 }
 
-\value{
-A set of .csv files, one for each element of the input list of blocked
-or assigned units.  Each file is named ``GroupXXX.csv", where ``XXX" is
-the group name taken from the input object.
+\value{ 
+A set of .csv files, one for each element of the input list of
+blocked or assigned units.  Each file is named \dQuote{GroupXXX.csv},
+where \dQuote{XXX} is the group name taken from the input object.  
 }
 
 \author{Ryan T. Moore}

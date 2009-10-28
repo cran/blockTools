@@ -1,3 +1,9 @@
+Version 0.4-1 (28 October 2009):
+- added algorithm = "optimal" option to block()
+- added optfactor argument to block()
+- updated manual reference and maintainer information 
+- made minor manual edits, such as adding appropriate \dQuote{}'s
+
 Version 0.3 (25 April 2009):
 - added weight argument to block()
 - updated maintainer information

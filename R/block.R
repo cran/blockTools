@@ -1,18 +1,20 @@
 block <- function(data, vcov.data = NULL, groups = NULL, n.tr = 2, id.vars,
                   block.vars = NULL, algorithm = "optGreedy", distance =
-                  "mahalanobis", weight = NULL, row.sort = NULL, level.two = FALSE,
-                  valid.var = NULL, valid.range = NULL, seed, verbose
-                  = FALSE, ...){ 
+                  "mahalanobis", weight = NULL, optfactor = 10^8, row.sort = NULL, 
+                  level.two = FALSE, valid.var = NULL, valid.range = NULL, seed, 
+                  verbose = FALSE, ...){ 
 
   if(is.null(algorithm)){
     stop("Blocking algorithm is unspecified.  See documentation for
 options.")
   }
-  if(algorithm=="randGreedy"){    
+  
+  if(algorithm == "randGreedy"){    
     row.sort <- sample(seq(1:nrow(data)))
     data <- data[row.sort,]
   }
-  if(algorithm=="sortGreedy"){
+  
+  if(algorithm == "sortGreedy"){
     if(is.null(row.sort)){
       stop("Blocking algorithm is 'sortGreedy', but vector of new row
 positions unspecified.  See documentation for details.")      
@@ -20,7 +22,7 @@ positions unspecified.  See documentation for details.")
     if(length(row.sort)!= nrow(data)){
     stop("Length of vector 'row.sort' does not equal number of rows in
 the data.  Respecify 'row.sort'.")
-  }
+    }
     data <- data[row.sort,]
   }
      
@@ -52,21 +54,21 @@ the data.  Respecify 'row.sort'.")
     }
   }
 
-  if(!is.null(weight)){  	
-  		if(is.vector(weight)){
-  			if(length(weight)!=ncol(vc.all)){
-  				stop("Weight vector length must be equal to number of blocking variables.  Respecify 'weight'.")
-  			} 		  		
+  if(!is.null(weight)){
+    if(is.vector(weight)){
+      if(length(weight)!=ncol(vc.all)){
+  		   stop("Weight vector length must be equal to number of blocking variables.  Respecify 'weight'.")
+  		 } 		  		
   		weight <- diag(weight)
-  		}
-  		if(is.matrix(weight)){
-  			if(sum(dim(weight)==dim(vc.all)) != 2){
-  				stop("Weight matrix dimensions must equal number of blocking variables.  Respecify 'weight'.")
-  			}
-  		}
+    }
+  	 if(is.matrix(weight)){
+      if(sum(dim(weight)==dim(vc.all)) != 2){
+      	stop("Weight matrix dimensions must equal number of blocking variables.  Respecify 'weight'.")
+  		 }
+    }
   		
-  	vc.all <- solve(t(solve(t(chol(vc.all))))%*%weight%*%solve(t(chol(vc.all))))
-  	}
+  	 vc.all <- solve(t(solve(t(chol(vc.all))))%*%weight%*%solve(t(chol(vc.all))))
+  }
 
   ## counter for groups
   gp <- 0
@@ -90,10 +92,10 @@ the data.  Respecify 'row.sort'.")
     gp <- gp + 1  
 
     if(verbose == TRUE){
-      cat("group is", i, "\n")
+      cat("Blocking group ", i, "\n")
     }
 
-    data.gp <- data[data[,groups]==i,c(id.vars, block.vars)]
+    data.gp <- data[data[,groups]==i, c(id.vars, block.vars)]
 
     level.one.names <- data.gp[, id.vars[1]] 
 
@@ -125,18 +127,24 @@ identification variable and re-block.")
     row.names(dist.mat) <- row.names(data.block)
     colnames(dist.mat) <- 1:(nrow(data.block)) 
 
-    if(!is.null(valid.var)){ 
-       d.mat <- expand.grid(data.block[, valid.var], data.block[,
-                valid.var])
-       diffs <- abs(d.mat[,1]-d.mat[,2])
-       valid.vec <- valid.range[1] <= diffs & diffs <= valid.range[2]
-      dist.mat[!valid.vec] <- Inf
-     }
+    if(!is.null(valid.var)){
+      d.mat <- expand.grid(data.block[, valid.var], data.block[, valid.var])
+      diffs <- abs(d.mat[,1]-d.mat[,2])
+      valid.vec <- valid.range[1] <= diffs & diffs <= valid.range[2]
+      if(algorithm != "optimal"){
+      	dist.mat[!valid.vec] <- Inf
+      }
+      if(algorithm == "optimal"){
+    		dist.mat[!valid.vec] <- 99999*max(dist.mat)
+    		}
+    }
 
     ## use only half the distance matrix (non-redundant)
-    dist.mat[row(dist.mat) <= col(dist.mat)] <- Inf
-    
-    if(level.two==TRUE && (length(level.one.names)>1)){
+    if(algorithm != "optimal"){
+    	 dist.mat[row(dist.mat) <= col(dist.mat)] <- Inf
+	 }
+	      
+    if(level.two == TRUE && (length(level.one.names)>1)){
       ## prohibit level 2 units from matching w/in own level 1 unit
       for(qq in 1:(length(level.one.names)-1)){
         for(rr in (qq+1):(length(level.one.names))){
@@ -153,42 +161,44 @@ identification variable and re-block.")
     odd.col <- seq(1:ncol(storage))[seq(1:ncol(storage))%%2 == 1]
     even.col <- (odd.col+1)[1:(length(odd.col)-1)]
 
-    ## block counter
-    j <- 0  
+    ## BEGIN optimal BYPASS HERE
+    if(algorithm != "optimal"){
 
-    ## begin block loop
-    while(sum(dist.mat==Inf)< prod(dim(dist.mat))){
-      j <- j+1
+      ## block counter
+      j <- 0  
 
-      if(verbose == TRUE){
-        cat("bl num is", j, "\n")
-      }
+      ## begin block loop
+      while(sum(dist.mat==Inf)< prod(dim(dist.mat))){
+        j <- j+1
 
-      if(j>1){storage <- rbind(storage, rep(NA, ncol(storage)))}
+        if(verbose == TRUE){
+          cat("Block number is", j, "\n")
+        }
 
-      ## initialize use.dist
-      if(nrow(storage)==1){
-        use.dist <- dist.mat
-      }
+        if(j>1){storage <- rbind(storage, rep(NA, ncol(storage)))}
+
+        ## initialize use.dist
+        if(nrow(storage)==1){
+          use.dist <- dist.mat
+        }
       
-      while(sum(use.dist==Inf) < prod(dim(use.dist))){
+        while(sum(use.dist==Inf) < prod(dim(use.dist))){
 
-        if(algorithm=="optGreedy"){
-          addr <- optGreedy(use.dist)
-        } 
-        if(algorithm %in% c("naiveGreedy", "randGreedy",
-                              "sortGreedy")){
-          addr <- naiveGreedy(use.dist)
-        }        
+          if(algorithm=="optGreedy"){
+            addr <- optGreedy(use.dist)
+          } 
+          if(algorithm %in% c("naiveGreedy", "randGreedy", "sortGreedy")){
+          	 addr <- naiveGreedy(use.dist)
+          }        
 
-        gr <- addr$gr
-        gc <- addr$gc
+          gr <- addr$gr
+          gc <- addr$gc
 
-        both <- c(row.names(use.dist)[gr],row.names(use.dist)[gc])
-        both <- both[!(both %in% storage[j,])]
-        both <- both[!(both %in% as.matrix(storage[,even.col]))]      
+          both <- c(row.names(use.dist)[gr],row.names(use.dist)[gc])
+          both <- both[!(both %in% storage[j,])]
+          both <- both[!(both %in% as.matrix(storage[,even.col]))]      
 
-        if(sum(is.na(storage[j,]))== length(storage[j,])){
+          if(sum(is.na(storage[j,]))== length(storage[j,])){
             store.cols.l1 <- c(1,3)
             store.cols.l2 <- c(2,4)
           }else{
@@ -196,75 +206,86 @@ identification variable and re-block.")
             store.cols.l2 <- sum(!is.na(storage[j,]))+1
           }
 
-        store.cols.l1 <- unique(store.cols.l1)
-        store.cols.l2 <- unique(store.cols.l2)
+          store.cols.l1 <- unique(store.cols.l1)
+          store.cols.l2 <- unique(store.cols.l2)
 
-        ## store names
-        storage[j, store.cols.l2] <- both     
+          ## store names
+          storage[j, store.cols.l2] <- both     
 
-        ## create level one names
-        both2 <- c(as.character(level.one.names[gr]),
+          ## create level one names
+          both2 <- c(as.character(level.one.names[gr]),
                    as.character(level.one.names[gc])) 
 
-        if(sum(both2 %in% as.matrix(storage[,odd.col]))!=0){
-          both2 <- both2[!(both2 %in% as.matrix(storage[,odd.col]))]
-        }
+          if(sum(both2 %in% as.matrix(storage[,odd.col]))!=0){
+            both2 <- both2[!(both2 %in% as.matrix(storage[,odd.col]))]
+          }
 
-        ## store level one names
-        storage[j, store.cols.l1] <- both2
+          ## store level one names
+          storage[j, store.cols.l1] <- both2
 
-        ## make submatrix of distances for this block
-        m1 <- matrix(!(row(dist.mat) %in% which(rownames(dist.mat) %in%
+          ## make submatrix of distances for this block
+          m1 <- matrix(!(row(dist.mat) %in% which(rownames(dist.mat) %in%
                                                as.matrix(storage))), 
                      nrow(dist.mat),ncol(dist.mat))
-        m2 <- matrix(!col(dist.mat) %in% which(rownames(dist.mat) %in%
+          m2 <- matrix(!col(dist.mat) %in% which(rownames(dist.mat) %in%
                                                as.matrix(storage)),
                      nrow(dist.mat),ncol(dist.mat))
-        submat <- dist.mat
-        submat[m1 & m2] <- Inf
+          submat <- dist.mat
+          submat[m1 & m2] <- Inf
 
-        ## create matrix of all chosen units (level one or two)
-        already.mat <- permutations(length(which(rownames(dist.mat)
+          ## create matrix of all chosen units (level one or two)
+          already.mat <- permutations(length(which(rownames(dist.mat)
                                                    %in%
                                                    as.matrix(storage))), 2,
                                       which(rownames(dist.mat) %in%
                                             as.matrix(storage)))
         
-        ## store max distance in block
-        storage[j, ncol(storage)] <-
-          max(dist.mat[already.mat][dist.mat[already.mat]<Inf])
+          ## store max distance in block
+          storage[j, ncol(storage)] <-
+            max(dist.mat[already.mat][dist.mat[already.mat]<Inf])
 
-        if(level.two == TRUE){
-          ## all level two units from chosen level one units
-          new.l2 <- which(rownames(dist.mat) %in%
+          if(level.two == TRUE){
+            ## all level two units from chosen level one units
+            new.l2 <- which(rownames(dist.mat) %in%
                           as.character(data[,id.vars[2]][data[,id.vars[1]] %in% as.matrix(storage[,odd.col[1:(length(odd.col)-1)]])]))   
           
-          new.l2 <- new.l2[!(new.l2 %in% already.mat[,])]
-          submat[new.l2,] <- submat[,new.l2] <- Inf
-        }
+            new.l2 <- new.l2[!(new.l2 %in% already.mat[,])]
+            submat[new.l2,] <- submat[,new.l2] <- Inf
+          }
 
-        for(alr.row in 1:nrow(already.mat)){
-          submat[already.mat[alr.row,1], already.mat[alr.row,2]] <-Inf
-        }
+          for(alr.row in 1:nrow(already.mat)){
+            submat[already.mat[alr.row,1], already.mat[alr.row,2]] <-Inf
+          }
         
-        use.dist <- submat
+          use.dist <- submat
 
-        if(sum(is.na(storage[j,]))==0){
-          use.dist <- Inf
+          if(sum(is.na(storage[j,]))==0){
+            use.dist <- Inf
+          }
         }
-      }
 
-      if(nrow(as.matrix(dist.mat))>1){
-        dist.mat <- dist.mat[-c(which(level.one.names %in%
+        if(nrow(as.matrix(dist.mat))>1){
+          dist.mat <- dist.mat[-c(which(level.one.names %in%
                                       storage[j,odd.col])),
                              -c(which(level.one.names %in%
                                       storage[j,odd.col]))]
-        level.one.names <- level.one.names[-c(which(level.one.names
+          level.one.names <- level.one.names[-c(which(level.one.names
                                                     %in%
                                                     storage[j,odd.col]))]
-        use.dist <- dist.mat
+          use.dist <- dist.mat
+        }
       }
-    }
+    } ## END optimal BYPASS HERE.
+
+    if(algorithm == "optimal"){
+	   dist.mat <- optfactor*dist.mat
+      optimalDistanceMatrix <- distancematrix(dist.mat)      
+      optimalOutput <- nonbimatch(optimalDistanceMatrix, precision = 9)
+      optimalOutput$halves$Distance <- as.double(optimalOutput$halves$Distance)/optfactor
+#      optimalOutput$halves[, 1] <- level.one.names[optimalOutput$halves[, 1]] 
+#      optimalOutput$halves[, 2] <- level.one.names[optimalOutput$halves[, 2]] 
+	   storage <- optimalOutput$halves
+	 }
 
     if(nrow(storage) > 1){
       ## sort by max distance
@@ -276,8 +297,8 @@ identification variable and re-block.")
     storage <- as.data.frame(storage)
 
     ## name columns
-    names(storage)[odd.col] <- paste("Unit",1:length(odd.col))
-    names(storage)[even.col] <- paste("Subunit",1:length(even.col))
+    names(storage)[odd.col] <- paste("Unit", 1:length(odd.col))
+    names(storage)[even.col] <- paste("Subunit", 1:length(even.col))
 
     names(storage)[ncol(storage)] <- "Distance"
     if(n.tr>2){
@@ -285,8 +306,8 @@ identification variable and re-block.")
     }
 
     ## cut duplicate level one names when level.two==F
-    if(level.two==FALSE){
-      storage <- storage[,odd.col]
+    if(level.two == FALSE){
+      storage <- storage[, odd.col]
     }
 
     storage[,ncol(storage)] <-

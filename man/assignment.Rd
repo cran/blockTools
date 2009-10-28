@@ -19,20 +19,19 @@
 \details{
 
 \code{block.obj} can be specified directly by the user.  It can be a
-single dataframe or matrix with blocks as rows and treatment conditions
-as columns.  \code{assignment} is designed to take a list with two
-elements.  The first element should be named \code{\$blocks}, and 
-should
-be a list of dataframes.  Each dataframe should have blocks as rows and
-treatment conditions as columns.  The second element should be a logical
-named \code{\$level.two}.  A third element, such as \code{$call} in a
-\code{block} output object, is currently ignored.
+single dataframe or matrix with blocks as rows and treatment
+conditions as columns.  \code{assignment} is designed to take a list
+with two elements.  The first element should be named \code{$blocks},
+and should be a list of dataframes.  Each dataframe should have blocks
+as rows and treatment conditions as columns.  The second element
+should be a logical named \code{$level.two}.  A third element, such as
+\code{$call} in a \code{block} output object, is currently ignored.
   
 Specifying the random seed yields constant assignment, and thus allows
 for easy replication of experimental protocols.
 
-If \code{namesCol = NULL}, then ``Treatment 1", ``Treatment 2", \ldots are
-used.
+If \code{namesCol = NULL}, then \dQuote{Treatment 1},
+\dQuote{Treatment 2}, \ldots are used.  
 }
 
 \value{A list with elements

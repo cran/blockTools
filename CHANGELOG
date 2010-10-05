@@ -1,3 +1,8 @@
+Version 0.5-1 (5 October 2010):
+- blocking now done in C for all algorithms except algorithm = "optimal" option in block()
+- toggled to check.names = FALSE in data.frame() creation of output object in block()
+- MCD and MVE citations and clarification of n.tr > 2 algorithms added to manuel page for block()
+
 Version 0.4-1 (28 October 2009):
 - added algorithm = "optimal" option to block()
 - added optfactor argument to block()

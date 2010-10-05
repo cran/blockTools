@@ -11,8 +11,8 @@
 \usage{
 block(data, vcov.data = NULL, groups = NULL, n.tr = 2, id.vars,
   block.vars = NULL, algorithm = "optGreedy", distance = "mahalanobis",
-  weight = NULL, optfactor = 10^8, row.sort = NULL, level.two = FALSE, valid.var = NULL,
-  valid.range = NULL, seed, verbose = FALSE, ...)
+  weight = NULL, optfactor = 10^8, row.sort = NULL, level.two = FALSE, 
+  valid.var = NULL, valid.range = NULL, seed, verbose = FALSE, ...)
 }
 
 \arguments{
@@ -72,8 +72,7 @@ units are used.
 
 If \code{n.tr} $> 2$, then the \code{optGreedy} algorithm finds the best
 possible pair match, then the best match to either member of the pair,
-then the best match to any member of the triple, \ldots.  Other
-algorithms proceed similarly.
+then the best match to any member of the triple, etc.  After finding the best pair match to a given unit, the other greedy algorithms proceed by finding the third, fourth, etc. best match to that given unit.
 
 An example of \code{id.vars} is \code{id.vars = c("id", "id2")}.  If
 two-level blocking is selected, \code{id.vars} should be ordered 
@@ -97,6 +96,8 @@ The \code{optGreedy} algorithm breaks ties by randomly selecting one of
 the minimum-distance pairs.  The \code{naiveGreedy}, \code{sortGreedy},
 and \code{randGreedy} algorithms break ties by randomly selecting one of
 the minimum-distance matches to the particular unit in question.
+
+As of version 0.5-1, blocking is done in C for all algorithms except \code{optimal} (see following paragraphs for more details on the \code{optimal} algorithm implementation).   
 
 The \code{optimal} algorithm uses two functions from the
 \pkg{nbpMatching} package: \code{distancematrix} prepares a distance
@@ -133,8 +134,8 @@ example of \code{help(nonbimatch)}.
 The \code{distance = "mcd"} and \code{distance = "mve"} options call
 \code{cov.rob} to calculate measures of multivariate spread robust to
 outliers.  The \code{distance = "mcd"} option calculates the Minimum
-Covariance Determinant estimate; the \code{distance = "mve"} option
-calculates the Minimum Volume Ellipsoid estimate.
+Covariance Determinant estimate (Rousseeuw 1985); the \code{distance = "mve"} option
+calculates the Minimum Volume Ellipsoid estimate (Rousseeuw and van Zomeren 1990).
 
 A user-specified distance matrix must have diagonals equal to 0,
 indicating zero distance between a unit and itself.  Only the lower
@@ -182,6 +183,10 @@ Hern\'andez Llamas.  2007.  "A 'Politically Robust' Experimental Design
 for Public Policy Evaluation, with Application to the Mexican Universal
 Health Insurance Program". \emph{Journal of Policy Analysis and
 Management} 26(3):  479-509.
+
+Rousseeuw, Peter J. 1985. "Multivariate Estimation with High Breakdown Point". \emph{Mathematical Statistics and Applications} 8:283-297.
+
+Rousseeuw, Peter J. and Bert C. van Zomeren. 1990. "Unmasking Multivariate Outliers and Leverage Points". \emph{Journal of the American Statistical Association} 85(411):633-639.
 }
 
 \author{Ryan T. Moore}

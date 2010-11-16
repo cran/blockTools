@@ -102,7 +102,7 @@ void mahaloptgreed(double *data, int *nrow, int *ncol, double *vcovi,  int *ntr,
     }
     k=2;
     while(k < *ntr){
-      t = 0;
+      t=0;
       min = vec[tri(star[0] - 2)];
       mn[k-1] = tri(star[0] - 2) + 1;
       for(i=0; i<k; i++){
@@ -185,25 +185,33 @@ void mahaloptgreed(double *data, int *nrow, int *ncol, double *vcovi,  int *ntr,
 	star[k] = 0;
       }
       vec[mn[k-1] - 1] = HUGE_VAL;
-
-      k++;
+      t=0;
+      for(i=0; i<k; i++){
+	if(star[i] == star[k]){
+	  t++;
+	}
+      }
+      if(t == 0){
+	k++;
+      }
     }
     for(i=0; i<*ntr; i++){
-       result[j*(*ntr) + i] =  star[i];
-       if(star[i] != 0){
-	 for(ii = tri(star[i] - 2); ii < tri(star[i] - 1); ii++){
-	   vec[ii] = HUGE_VAL;
-	 }
-	 for(ii= (star[i] + 1); ii <= *nrow; ii++){
-	   vec[(tri(ii-2) + star[i]) - 1] = HUGE_VAL;
-	 }
-       }
+      result[j*(*ntr) + i] =  star[i];
+      if(star[i] != 0){
+	for(ii = tri(star[i] - 2); ii < tri(star[i] - 1); ii++){
+	  vec[ii] = HUGE_VAL;
+	}
+	for(ii= (star[i] + 1); ii <= *nrow; ii++){
+	  vec[(tri(ii-2) + star[i]) - 1] = HUGE_VAL;
+	}
+      }
     }
-  cinf = 0;
-  for(i=0; i< n; i++){
-    if(vec[i] < HUGE_VAL){
-      cinf++;
+    cinf = 0;
+    for(i=0; i< n; i++){
+      if(vec[i] < HUGE_VAL){
+	cinf++;
+      }
     }
-  }
   }
 }
+ 

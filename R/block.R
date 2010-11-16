@@ -186,6 +186,9 @@ identification variable and re-block.")
     
     
     if(algorithm == "optimal"){
+    	 if(n.tr > 2){
+    	  warning("You specified algorithm = optimal and n.tr > 2.  However, optimal blocking only implemented for exactly two treatment conditions.  If no other error is encountered, optimal blocks for n.tr = 2 are returned here.")
+    	 }
       if(is.character(distance)){
         dist.mat <- mahal(data.block, vc.all)
       }else{      
@@ -227,6 +230,7 @@ identification variable and re-block.")
     else if(algorithm == "optimal"){
       for(i in 1:(ncol(out1) -1)){
         names(storage1)[i] <- paste("Unit", i)
+        storage1[,i] <-  as.character(data.gp[storage1[,i], id.vars[1]])
       }
     }
     if(algorithm != "optimal"){

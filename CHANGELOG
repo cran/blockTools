@@ -1,15 +1,21 @@
+Version 0.5-2 (16 November 2010):
+- In block(), added warning for attempts to use algorithm = "optimal" with n.tr > 2.  (Optimal algorithm only implemented for n.tr = 2.  After warning, block() returns optimal blocks for n.tr = 2.)
+- In block(), corrected class of display of blocks for algorithm = optimal.
+- In block(), corrected display of blocks for n.tr > 3 (from 0.5-1).
+- Updated CHANGELOG format.
+
 Version 0.5-1 (5 October 2010):
-- blocking now done in C for all algorithms except algorithm = "optimal" option in block()
-- toggled to check.names = FALSE in data.frame() creation of output object in block()
-- MCD and MVE citations and clarification of n.tr > 2 algorithms added to manuel page for block()
+- In block(), blocking now done in C for all algorithms except algorithm = "optimal".
+- In block(), toggled to check.names = FALSE in data.frame() creation of output object.
+- In block() manual page, added MCD and MVE citations and clarification of n.tr > 2 algorithms.
 
 Version 0.4-1 (28 October 2009):
-- added algorithm = "optimal" option to block()
-- added optfactor argument to block()
-- updated manual reference and maintainer information 
-- made minor manual edits, such as adding appropriate \dQuote{}'s
+- In block(), added algorithm = "optimal" option.
+- In block(), added optfactor argument.
+- Updated manual reference and maintainer information.
+- Made minor manual edits, such as adding appropriate \dQuote{}'s.
 
 Version 0.3 (25 April 2009):
-- added weight argument to block()
-- updated maintainer information
-- added changelog
+- In block(), added weight argument.
+- Updated maintainer information.
+- Added CHANGELOG.

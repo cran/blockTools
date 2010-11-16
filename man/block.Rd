@@ -97,7 +97,9 @@ the minimum-distance pairs.  The \code{naiveGreedy}, \code{sortGreedy},
 and \code{randGreedy} algorithms break ties by randomly selecting one of
 the minimum-distance matches to the particular unit in question.
 
-As of version 0.5-1, blocking is done in C for all algorithms except \code{optimal} (see following paragraphs for more details on the \code{optimal} algorithm implementation).   
+As of version 0.5-1, blocking is done in C for all algorithms except
+\code{optimal} (see following paragraphs for more details on the
+\code{optimal} algorithm implementation).
 
 The \code{optimal} algorithm uses two functions from the
 \pkg{nbpMatching} package: \code{distancematrix} prepares a distance

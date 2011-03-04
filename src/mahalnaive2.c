@@ -39,7 +39,7 @@ void mahalnaive2(double *data, int *nrow, int *ncol, double *vcovi,  int *ntr, i
   if(*valid == 1){
     for(i=0; i<n; i++){
       j = ceil(sqrt((2*(i+1))+.25)+0.5);
-      if(sqrt(pow((validvar[j-1] - validvar[((i+1)-((j-2)*(j-1)/2))-1]), 2)) < *validlb && sqrt(pow((validvar[j-1] - validvar[((i+1)-((j-2)*(j-1)/2))-1]), 2)) > *validub){
+      if(sqrt(pow((validvar[j-1] - validvar[((i+1)-((j-2)*(j-1)/2))-1]), 2)) < *validlb || sqrt(pow((validvar[j-1] - validvar[((i+1)-((j-2)*(j-1)/2))-1]), 2)) > *validub){
 	vec[i] = HUGE_VAL;
       }
     }

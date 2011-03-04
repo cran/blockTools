@@ -1,3 +1,7 @@
+Version 0.5-3 (4 March 2011):
+- In block(), repaired valid.var and valid.range arguments for algorithms other than "optimal".  These worked in 0.4-1, not 0.5-1 or 0.5-2.
+- In block(), added warning that valid.var and valid.range arguments are ignored for algorithm = "optimal".
+
 Version 0.5-2 (16 November 2010):
 - In block(), added warning for attempts to use algorithm = "optimal" with n.tr > 2.  (Optimal algorithm only implemented for n.tr = 2.  After warning, block() returns optimal blocks for n.tr = 2.)
 - In block(), corrected class of display of blocks for algorithm = optimal.

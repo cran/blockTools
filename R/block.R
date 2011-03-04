@@ -116,16 +116,16 @@ identification variable and re-block.")
     }
     data.block <- data.frame(data.gp[, !(names(data.gp) %in% id.vars)])
     if(is.null(valid.var)){
-      valid = 0
-      validvar = numeric(1)
-      validlb = numeric(1)
-      validub = numeric(1)
+      valid <- 0
+      validvar <- numeric(1)
+      validlb <- numeric(1)
+      validub <- numeric(1)
     }
     else{
-      valid = 1
-      validvar = data.gp[,valid.var]
-      validlb = valid.range[1]
-      validub = valid.range[2]
+      valid <- 1
+      validvar <- data.gp[,valid.var]
+      validlb <- valid.range[1]
+      validub <- valid.range[2]
     }
     if(algorithm != "optimal"){
     if(is.character(distance)){
@@ -194,16 +194,22 @@ identification variable and re-block.")
       }else{      
         dist.mat <- distance[data[,groups]==i, data[,groups]==i]
       }
-      dist.mat <- matrix(as.integer(optfactor*dist.mat),
-                         nrow=nrow(dist.mat),
-                         ncol=ncol(dist.mat))
+
       if(!is.null(valid.var)){
         d.mat <- expand.grid(data.block[, valid.var], data.block[, valid.var])
         diffs <- abs(d.mat[,1]-d.mat[,2])
-        valid.vec <- valid.range[1] <= diffs & diffs <= valid.range[2]
-#          dist.mat[!valid.vec] <- 2147483647 #maximum 32 bit integer
-          dist.mat[!valid.vec] <- max(dist.mat) + 1
+        valid.vec <- (valid.range[1] <= diffs) & (diffs <= valid.range[2])
       }
+
+      dist.mat <- matrix(as.integer(optfactor*dist.mat),
+                         nrow=nrow(dist.mat),
+                         ncol=ncol(dist.mat))
+
+      if(!is.null(valid.var)){
+      	warning("You specified algorithm = optimal and valid.var.  However, valid.var and valid.range are only implemented for other algorithms.  If no other error is encountered, optimal blocks ignoring the restriction are returned here.")
+        ##dist.mat[!valid.vec] <- 2147483647 #maximum 32 bit integer
+      }
+
       optimalDistanceMatrix <- distancematrix(dist.mat)
       optimalOutput <- nonbimatch(optimalDistanceMatrix, precision = 9)
       optimalOutput$halves$Distance <- as.double(optimalOutput$halves$Distance)/optfactor
@@ -254,6 +260,11 @@ identification variable and re-block.")
                  storage[,1])
       storage <- data.frame(storage[o,], check.names = FALSE)
     }
+    
+    ## function to count NA, to remove empty rows (for valid.var)
+    sum.na <- function(sum.na.vector){return(sum(is.na(sum.na.vector)))}
+    ## remove empty rows
+    storage <- storage[apply(storage, 1, sum.na) != ncol(storage),]
     
     rownames(storage) <- 1:(nrow(storage))
     out[[gp]] <- storage

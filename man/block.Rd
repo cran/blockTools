@@ -162,7 +162,11 @@ blocking is not currently implemented for \code{algorithm = "optimal"}.
 An example of a variable restriction is \code{valid.var = "b2"},
 \code{valid.range = c(10,50)}, which requires that units in the same
 block be at least 10 units apart, but no more than 50 units apart, on
-variable \code{"b2"}.
+variable \code{"b2"}.  As of version 0.5-3, variable restrictions are
+implemented in all algorithms except \code{optimal}.  Note that
+employing a variable restriction may result in fewer than the maximum
+possible number of blocks.  See
+\url{http://rtm.wustl.edu/software.blockTools.htm} for details.
 }
 
 \value{ A list with elements

@@ -15,8 +15,8 @@ treatment conditions. Write outputs to .tex and .csv files.
 \tabular{ll}{
 Package: \tab blockTools\cr
 Type: \tab Package\cr
-Version: \tab 0.5-3\cr
-Date: \tab 2011-03-04\cr
+Version: \tab 0.5-4\cr
+Date: \tab 2012-05-07\cr
 License: \tab  GPL (>=2)\cr
 }
 Given raw data, \code{block} creates experimental blocks,

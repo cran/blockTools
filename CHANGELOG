@@ -1,3 +1,7 @@
+Version 0.5-4 (7 May 2012):
+- In outTeX(), added arguments enabling user to specify output file name(s) and caption(s) directly, as lists of length(block.obj$blocks) or length(block.obj$assg), depending on whether block.obj is output from block() or assignment().  File names are reused as table reference labels, in the form "t:filename".   
+- In outCSV(), added argument enabling user to specify output file name(s) directly, as list of length(block.obj$blocks) or length(block.obj$assg), depending on whether block.obj is output from block() or assignment(). 
+
 Version 0.5-3 (4 March 2011):
 - In block(), repaired valid.var and valid.range arguments for algorithms other than "optimal".  These worked in 0.4-1, not 0.5-1 or 0.5-2.
 - In block(), added warning that valid.var and valid.range arguments are ignored for algorithm = "optimal".

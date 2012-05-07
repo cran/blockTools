@@ -14,3 +14,5 @@ outCSV(out)
 ## create three .csv files of assigned blocks
 ##   (note: overwrites blocked .csv files)
 outCSV(assg)
+## create three .csv files with custom file names
+outCSV(assg, file.names = list("file1", "file2", "file3"))

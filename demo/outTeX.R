@@ -14,3 +14,6 @@ outTeX(out)
 ## create three .tex files of assigned blocks
 ##   (note: overwrites blocked .tex files)
 outTeX(assg)
+## create three .tex files with custom file names and captions
+outTeX(assg, file.names = list("file1", "file2", "file3"), 
+	   captions = list("This is caption 1.", "Caption 2.", "Caption 3?"))

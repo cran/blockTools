@@ -1,4 +1,4 @@
-outCSV <- function(block.obj, namesCol = NULL, digits = 2, ...){
+outCSV <- function(block.obj, namesCol = NULL, file.names = NULL, digits = 2, ...){
 
   ## takes block, assignment, or diagnose object
   if(!is.null(block.obj$blocks)){ 
@@ -17,6 +17,12 @@ outCSV <- function(block.obj, namesCol = NULL, digits = 2, ...){
     if(!is.null(namesCol)){
       names(tab) <- namesCol
     }
-    write.csv(tab, file=paste("Group", nm, ".csv", sep=""), ...)
+    if(is.null(file.names)){
+    	file.name <- paste("Group", nm, ".csv", sep="")
+    }else{
+    	file.name <- paste(file.names[[i]], ".csv", sep = "")
+    	}
+    
+    write.csv(tab, file = file.name, ...)
   }
 }

@@ -2,8 +2,8 @@ Package: blockTools
 Type: Package
 Title: Block, assign, and diagnose potential interference in randomized
         experiments
-Version: 0.5-3
-Date: 2011-03-04
+Version: 0.5-4
+Date: 2012-05-07
 Author: Ryan T. Moore
 Maintainer: Ryan T. Moore <rtm@wustl.edu>
 Depends: MASS, gtools, nbpMatching, xtable
@@ -16,6 +16,6 @@ Description: Blocks units into experimental blocks, with one unit per
         assigned to different treatment conditions.  Write outputs to
         .tex and .csv files.
 License: GPL (>= 2)
-Packaged: 2011-03-04 23:21:24 UTC; rtm
+Packaged: 2012-05-07 17:06:47 UTC; rtm
 Repository: CRAN
-Date/Publication: 2011-03-05 16:39:58
+Date/Publication: 2012-05-08 04:06:50

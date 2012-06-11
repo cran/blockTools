@@ -10,7 +10,7 @@
 void mahaloptgreed(double *data, int *nrow, int *ncol, double *vcovi,  int *ntr, int *l2, int *l1names, int *valid, double *validvar, double *validlb, double *validub, int *verbose, double *pairdist, int *result){
   int n = choose(*nrow, 2);
   int j, mn[*ntr - 1], i, k=0, ii, cinf=n, t, star[*ntr];
-  double min, *vec = calloc(n, sizeof(double)), X[*nrow][*ncol], tmp1[*ncol], tmp2[*ncol], r;
+  double min, *vec = Calloc(n, double), X[*nrow][*ncol], tmp1[*ncol], tmp2[*ncol], r;
   for(j=0; j<*ncol; j++){
     for(i=0; i<*nrow; i++){
       X[i][j] = data[k];
@@ -119,12 +119,12 @@ void mahaloptgreed(double *data, int *nrow, int *ncol, double *vcovi,  int *ntr,
 	if(t > 0){
 	 for(ii = tri(star[i] - 2); ii < tri(star[i] - 1); ii++){
 	   if(vec[ii] == min){
-	     	  GetRNGstate();
-		  r = unif_rand();
-		  PutRNGstate(); 
-		  if(r < 1/t){
-		    mn[k-1] = ii+1;
-		  }
+	     GetRNGstate();
+	     r = unif_rand();
+	     PutRNGstate(); 
+	     if(r < 1/t){
+	       mn[k-1] = ii+1;
+	     }
 	   }
 	 }
 	}
@@ -142,12 +142,12 @@ void mahaloptgreed(double *data, int *nrow, int *ncol, double *vcovi,  int *ntr,
 	if(t > 0){
 	  for(ii = (star[i] + 1); ii <= *nrow; ii++){
 	    if(vec[(tri(ii - 2) + star[i]) - 1] == min){
-	     	  GetRNGstate();
-		  r = unif_rand();
-		  PutRNGstate(); 
-		  if(r < 1/t){
-		    mn[k-1] = (tri(ii - 2) + star[i]);
-		  }
+	      GetRNGstate();
+	      r = unif_rand();
+	      PutRNGstate(); 
+	      if(r < 1/t){
+		mn[k-1] = (tri(ii - 2) + star[i]);
+	      }
 	    }
 	  }
 	}
@@ -186,13 +186,21 @@ void mahaloptgreed(double *data, int *nrow, int *ncol, double *vcovi,  int *ntr,
       }
       vec[mn[k-1] - 1] = HUGE_VAL;
       t=0;
-      for(i=0; i<k; i++){
-	if(star[i] == star[k]){
-	  t++;
+      if(star[k]>0){
+	for(i=0; i<k; i++){
+	  if(star[i] == star[k]){
+	    t++;
+	  }
+	}
+	if(t == 0){
+	  k++;
 	}
       }
-      if(t == 0){
-	k++;
+      else if(star[k] == 0){
+	for(i = k; i<=*ntr; i++){
+	  star[i] = 0;
+	}
+	k = *ntr;
       }
     }
     for(i=0; i<*ntr; i++){

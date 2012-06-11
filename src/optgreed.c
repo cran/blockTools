@@ -167,13 +167,21 @@ void optgreed(double *vec, int *n, int *nrow, int *ntr, int *l2, int *l1names,  
       }
       vec[mn[k-1] - 1] = HUGE_VAL;
       t=0;
-      for(i=0; i<k; i++){
-	if(star[i] == star[k]){
-	  t++;
+      if(star[k] >0 ){
+	for(i=0; i<k; i++){
+	  if(star[i] == star[k]){
+	    t++;
+	  }
+	}
+	if(t == 0){
+	  k++;
 	}
       }
-      if(t == 0){
-	k++;
+      else if(star[k] == 0){
+	for(i = k; i<=*ntr; i++){
+	  star[i] = 0;
+	}
+	k = *ntr;
       }
     }
     for(i=0; i<*ntr; i++){

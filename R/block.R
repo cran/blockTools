@@ -219,7 +219,8 @@ identification variable and re-block.")
     }
     
     storage1 <- out1
-    storage1[storage1==0] <- NA
+    storage1[storage1==0 & col(storage1) < ncol(storage1)] <- NA
+#    storage1[storage1[,1:(ncol(storage1)-1)]==0, 1:(ncol(storage1)-1)] <- NA
     count <- 1
 
     if(algorithm != "optimal"){
@@ -264,7 +265,7 @@ identification variable and re-block.")
     ## function to count NA, to remove empty rows (for valid.var)
     sum.na <- function(sum.na.vector){return(sum(is.na(sum.na.vector)))}
     ## remove empty rows
-    storage <- storage[apply(storage, 1, sum.na) != ncol(storage),]
+    storage <- storage[apply(storage, 1, sum.na) != (ncol(storage)-1),]
     
     rownames(storage) <- 1:(nrow(storage))
     out[[gp]] <- storage

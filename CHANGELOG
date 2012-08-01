@@ -1,3 +1,6 @@
+Version 0.5-6 (1 August 2012)
+- Display bug fix in file block.R (wherein units with distance zero were blocked as desired, but reported as having distance NA).
+
 Version 0.5-5 (11 June 2012):
 - Memory allocation bug fixes in files mahaloptgreed.c and optgreed.c.
 

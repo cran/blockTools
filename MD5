@@ -1,10 +1,10 @@
-3007a73aa3b7944b0811407af0b5f2b9 *CHANGELOG
+d398d15adf9ab66c6588a77538ccfd2d *CHANGELOG
 263b03fca1747f78c6f7dc74e8d028b3 *COPYING
-0d599ff3e4b80fee5a52e79d5c3173da *DESCRIPTION
+70b13b468c6ee5fb3ea51752a523c9b0 *DESCRIPTION
 d47bf6927a19e03787dc04a0a13c968f *LICENSE
 1f0b32c1ffb30b2dc6f12d0640038f7d *NAMESPACE
 c041fbe6479a69e6333d67a537f80373 *R/assignment.R
-b95bd238f6374525728fc2f32d5ceb8e *R/block.R
+b1a0f170279d7c7506a7bfba65b15858 *R/block.R
 11f78c4b45a8adc4b7081d37cf14bcd7 *R/diagnose.R
 239f6a9388e320edccdff68f78ffa16a *R/infmean.R
 d10aae4eca9d1f8fb73286d9c899a9f5 *R/mahal.R
@@ -29,7 +29,7 @@ fcef89ec5577f8eae6bcaf9b256a4cb5 *demo/outCSV.R
 9287a5105470c0157b2739d415e55bc7 *demo/outTeX.R
 7cd4379721d35f97f272386a473b6812 *man/assignment.Rd
 45b2ab6a6ffc3e1e53a5916ce6ba2b6e *man/block.Rd
-b67cfb97450b716e38c9e182a29f30d9 *man/blockTools-package.Rd
+5177ae98a0f0b604b1d954a1849fb1a7 *man/blockTools-package.Rd
 06f25c4b4307d1b74c98ba02685759cb *man/diagnose.Rd
 354ff72df85185042f9a03c9e89bddd9 *man/outCSV.Rd
 244dc2fa3a9409928f3ad1a1cf96066d *man/outTeX.Rd

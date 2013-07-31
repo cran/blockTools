@@ -6,208 +6,157 @@
 #include <assert.h>
 #include <stdlib.h>
 #include "util.h"
+#include "getDist.h"
 
-void naive(double *vec, int *n, int *nrow, int *ntr, int *l2, int *l1names,  int *valid, double *validvar, double *validlb, double *validub, int *verbose, double *pairdist, int *result){
-  int j, i, ii, iii, cinf=*n, t, star[*ntr], mn[*ntr - 1], k;
-  double min, r;
-   if(*l2 == 1){
-    for(i=0; i<*n; i++){
-      j = ceil(sqrt((2*(i+1))+.25)+0.5);
-      if(l1names[j-1] == l1names[((i+1)-((j-2)*(j-1)/2))-1]){
-	vec[i] = HUGE_VAL;
-      }
-    }
-  }
-  if(*valid == 1){
-    for(i=0; i<*n; i++){
-      j = ceil(sqrt((2*(i+1))+.25)+0.5);
-      if(sqrt(pow((validvar[j-1] - validvar[((i+1)-((j-2)*(j-1)/2))-1]), 2)) < *validlb || sqrt(pow((validvar[j-1] - validvar[((i+1)-((j-2)*(j-1)/2))-1]), 2)) > *validub){
-	vec[i] = HUGE_VAL;
-      }
-    }
-  }
-  j = -1;
-  for(i=0; i<*nrow; i++){
-    j++;
-    cinf = 0;
-    for(ii = tri((i+1) - 2); ii < tri((i+1) - 1); ii++){
-      if(vec[ii] < HUGE_VAL){
-	cinf++;
-      }
-    }
-    for(ii = ((i+1) + 1); ii <= *nrow; ii++){
-      if(vec[(tri(ii - 2) + (i+1)) - 1] < HUGE_VAL){
-	cinf++;
-      }
-    }
+void naive(double *data,
+	   double *distvec,
+	   int *nrow,
+	   int *ncol,
+	   double *vcovi,
+	   int *ntr,
+	   int *l2,
+	   int *l1names,
+	   int *valid,
+	   double *validvar,
+	   double *validlb,
+	   double *validub,
+	   int *verbose,
+	   double *pairdist,
+	   int *ismahal,
+	   int *result,
+	   int *p)
+{
 
-    if(cinf == 0){ 
-      j--;
-      continue;
+  /*                                */
+  /*       set up distances         */
+  /*                                */
+  
+  
+  unsigned n = choose(*nrow, 2), i;
+  double *vec=Calloc(n, double), *vec2=Calloc(n, double);
+  
+  /* Compute distances between all units */
+  if(*ismahal==1)
+    {
+      vec = allmahal(ncol, nrow, n, data, vcovi, vec);
     }
-    
-    if(*verbose == 1){
-      Rprintf("Block number is %i \n", j+1);
+  else
+    {
+      /* put in user-supplied distances if mahalanobis distances are not wanted */
+      for(i=1; i<n; i++)
+	{
+	  vec[i] = distvec[i];    
+	}
     }
-    mn[0] = tri((i+1) - 2) + 1;
-    min = vec[tri((i+1) - 2)];
-    t=0;
-    for(ii = tri((i+1) - 2)+1; ii < tri((i+1) - 1); ii++){
-      if(vec[ii] < min){
-	t = 0;
-	min = vec[ii];
-	mn[0] = ii + 1;
-      }
-      else if (vec[ii] == min){
-	t++;
-      }
+  for(i=1; i<n; i++)
+    {
+      vec2[i] = vec[i];    
     }
-    if(t > 0){
-      for(ii = tri((i+1) - 2); ii < tri((i+1) - 1); ii++){
-	if(vec[ii] == min){
-	  GetRNGstate();
-	  r = unif_rand();
-	  PutRNGstate(); 
-	  if(r < 1/t){
-	    mn[0] = ii+1;
-	  }
-	}
-      }
-    }
-    t=0;
-    for(ii = ((i+1) + 1); ii <= *nrow; ii++){
-      if(vec[(tri(ii - 2) + (i+1)) - 1] < min){
-	t=0;
-	min = vec[(tri(ii - 2) + (i+1)) - 1];
-	mn[0] = (tri(ii - 2) + (i+1));
-      }
-      else if (vec[(tri(ii - 2) + (i+1)) - 1] == min){
-	t++;
-      }
-    }
-    if(t > 0){
-      for(ii = ((i+1) + 1); ii <= *nrow; ii++){
-	if(vec[(tri(ii - 2) + (i+1)) - 1] == min){
-	  GetRNGstate();
-	  r = unif_rand();
-	  PutRNGstate(); 
-	  if(r < 1/t){
-	    mn[0] = (tri(ii - 2) + (i+1));
-	  }
-	}
-      }
-    }
-    star[0] = ceil(sqrt(2*mn[0]+.25)+0.5);
-    star[1] =  (mn[0]-((star[0]-2)*(star[0]-1)/2));
-    pairdist[j] = vec[mn[0]-1];
-    vec[mn[0] - 1] = HUGE_VAL;
-    if(*l2 == 1){
-      for(iii=0; iii<*n; iii++){
-	ii = ceil(sqrt((2*(iii+1))+.25)+0.5);
-	if(l1names[ii-1] == l1names[star[0]-1] && (ii != star[0])){
-	  vec[iii] = HUGE_VAL;
-	} 
-	else if(l1names[ii-1] == l1names[star[1]-1] && (ii != star[1])){
-	 vec[iii] = HUGE_VAL;
-	}
-	else if(l1names[((iii+1)-((ii-2)*(ii-1)/2))-1] == l1names[star[0]-1] && ((iii+1)-((ii-2)*(ii-1)/2)) != star[0]){
-	  vec[iii] = HUGE_VAL;
-	  } 
-	else if(l1names[((iii+1)-((ii-2)*(ii-1)/2))-1] == l1names[star[1]-1] && ((iii+1)-((ii-2)*(ii-1)/2)) != star[1]){
-	 vec[iii] = HUGE_VAL;
-	}
-      }
-    }  
-    k=2;
-    while(k < *ntr){
-      t = 0;
-      min = vec[tri(star[0] - 2)];
-      mn[k-1] = tri(star[0] - 2) + 1;
-      for(ii = tri((i+1) - 2)+1; ii < tri((i+1) - 1); ii++){
-	if(vec[ii] < min){
-	  t = 0;
-	  min = vec[ii];
-	  mn[k-1] = ii + 1;
-	}
-	else if (vec[ii] == min){
-	  t++;
-	}
-      }
-      if(t > 0){
-	for(ii = tri((i+1) - 2); ii < tri((i+1) - 1); ii++){
-	  if(vec[ii] == min){
-	    GetRNGstate();
-	    r = unif_rand();
-	    PutRNGstate(); 
-	    if(r < 1/t){
-	      mn[k-1] = ii+1;
+  /* Set some distances to INF to avoid unwanted matches if valid.var is set or if level.two=TRUE (return original distances otherwise) */
+
+  vec = cleanUp(*l2, l1names, *valid, validvar, *validlb, *validub, n, vec);
+ 
+  unsigned unitlist[*nrow], unit, k, matches[*ntr], mm, mn[*ntr], check=0, j=0;
+
+  for(unit=0; unit<*nrow; unit++)
+    {
+      if(unitlist[unit] != 1)
+	{
+	  matches[0] = unit+1;
+	      if(*l2 == 1) /* if level.two=TRUE, eliminate subunits within the same level two unit */
+		{
+		  for(i=0; i<n; i++)
+		    {
+		      if(levelTwoCheck(i, unit+1, l1names)==1)
+			{
+			  vec[i] = HUGE_VAL;
+			  if(l1names[myrow(i)-1]==l1names[unit])
+			    {
+			      unitlist[myrow(i)-1] = 1;
+			    }
+			  else
+			    {
+			      unitlist[mycol(i)-1] = 1;
+			    }
+			}
+		    }
+		}
+
+	  for(k=0; k<(*ntr-1); k++)
+	    {
+
+	      /* find minimum distance */
+	      mn[k] = findMin2(vec, *nrow, unit+1);
+
+	      /* record row and column */
+	      mm = mycol(mn[k]);
+	      if(mm==matches[0])
+		{
+		  matches[k+1] = myrow(mn[k]);
+		}
+	      else
+		{
+		  matches[k+1] = mm;
+		}
+	      unitlist[matches[k+1]-1] = 1;
+	      
+      
+	      if(vec[mn[k]] == HUGE_VAL && check==0)
+		{
+		  check = k+1;
+		}
+
+	       /* inf out things not to be reused */
+	      vec[mn[k]] = HUGE_VAL;
+	      if(*l2 == 1) /* if level.two=TRUE, eliminate subunits within the same level two unit */
+		{
+		  for(i=0; i<n; i++)
+		    {
+		      if(levelTwoCheck(i, matches[k+1], l1names)==1)
+			{
+			  vec[i] = HUGE_VAL;
+			  if(l1names[myrow(i)-1]==l1names[matches[k+1]-1])
+			    {
+			      unitlist[myrow(i)-1] = 1;
+			    }
+			  else
+			    {
+			      unitlist[mycol(i)-1] = 1;
+			    }
+			}
+		    }
+		}
 	    }
-	  }
-	}
-      }
-      t=0;
-      for(ii = ((i+1) + 1); ii <= *nrow; ii++){
-	if(vec[(tri(ii - 2) + (i+1)) - 1] < min){
-	  t=0;
-	  min = vec[(tri(ii - 2) + (i+1)) - 1];
-	  mn[k-1] = (tri(ii - 2) + (i+1));
-	}
-	else if (vec[(tri(ii - 2) + (i+1)) - 1] == min){
-	  t++;
-	}
-      }
-      if(t > 0){
-	for(ii = ((i+1) + 1); ii <= *nrow; ii++){
-	  if(vec[(tri(ii - 2) + (i+1)) - 1] == min){
-	    GetRNGstate();
-	    r = unif_rand();
-	    PutRNGstate(); 
-	    if(r < 1/t){
-	      mn[k-1] = (tri(ii - 2) + (i+1));
+	  pairdist[j] = maxDist(vec2, matches, *ntr);
+
+	  /* get rid of used units */ 
+	  for(i=0; i<*ntr; i++)
+	    {
+	      vec = eliminate(matches[i],vec, *nrow);
 	    }
-	  }
+
+	  
+	  /* record matches for the R output */
+	  if(check > 0)
+	    {
+	      for(i=check; i<*ntr; i++)
+		{
+		  matches[i] = 0;
+		}
+	    }
+	  check = 0;
+
+	  for(i=0; i<*ntr; i++)
+	    {
+	      result[j*(*ntr) + i] = matches[i];
+	    }
+
+  /* reset matches to zero for next iteration */
+	  for(i=0; i<*ntr; i++)
+	    {
+	      matches[i] = 0;
+	    }
+	  j++;
 	}
-      }
-     
-      star[k] = ceil(sqrt(2*mn[k-1]+.25)+0.5);
-     
-      for(iii=0; iii<k; iii++){
-        if(star[iii] < star[k] && vec[(tri(star[k]-2) + star[iii]) - 1] > pairdist[j] && vec[(tri(star[k]-2) + star[iii]) - 1] < HUGE_VAL){
-	  pairdist[j] = vec[(tri(star[k]-2) + star[iii]) - 1];
-	}
-        if(star[iii] > star[k] && vec[(tri(star[iii]-2) + star[k]) - 1] > pairdist[j] && vec[(tri(star[iii]-2) + star[k]) - 1] < HUGE_VAL){
-	  pairdist[j] = vec[(tri(star[iii]-2) + star[k]) - 1];
-	}
-      }
-      if(*l2 == 1){
-	for(iii=0; iii<*n; iii++){
-	  ii = ceil(sqrt(2*(iii+1)+.25)+0.5);
-	  if(l1names[((iii+1)-((ii-2)*(ii-1)/2)) - 1] == l1names[star[k] - 1] && ((iii+1)-((ii-2)*(ii-1)/2)) != star[k]){
-	    vec[iii] = HUGE_VAL;
-	  }
-	  else if(l1names[ii - 1] == l1names[star[k] - 1] && ii != star[k]){
-	    vec[iii] = HUGE_VAL;
-	  }
-	}
-      }
-      if(vec[mn[k-1]-1] == HUGE_VAL){
-	star[k] = 0;
-      }
-      vec[mn[k-1] - 1] = HUGE_VAL;
-      k++;
     }
-    for(iii=0; iii<*ntr; iii++){
-       result[j*(*ntr) + iii] =  star[iii];
-    }
-    for(iii=0; iii<*ntr; iii++){
-       if(star[iii] != 0){
-	 for(ii = tri(star[iii] - 2); ii < tri(star[iii] - 1); ii++){
-	   vec[ii] = HUGE_VAL;
-	 }
-	 for(ii= (star[iii] + 1); ii <= *nrow; ii++){
-	   vec[(tri(ii-2) + star[iii]) - 1] = HUGE_VAL;
-	 }
-       }
-    }
-  }
 }

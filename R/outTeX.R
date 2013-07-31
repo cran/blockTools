@@ -1,5 +1,7 @@
 outTeX <- function(block.obj, namesCol = NULL, file.names = NULL, captions = NULL, digits = 2, ...){
 
+  require("xtable")
+  
   ## takes block, assignment, or diagnose object
   if(!is.null(block.obj$blocks)){ 
     block.obj <- block.obj$blocks

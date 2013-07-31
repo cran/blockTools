@@ -1,3 +1,22 @@
+Version 0.5-7 (30 July 2013)
+- Remove .First.lib (zzz.R)
+- In block(), reformat output from algorithm = "optimal".
+- In block(), changed default optfactor to 10^7 so that vanilla blockings of x100 with groups run successfully.
+- In block(), now print error when user provides invalid "algorithm" argument.
+- Added option block(…, distance = "euclidean", …).
+- Changed packages nbpMatching and xtable from "Depends" to "Suggests", to only invoke when needed.
+- Added function createBlockIDs() to output vector of integers to uniquely identify blocks.
+- Added function assg2xBalance() to ease balance calculations for assignment objects where n.tr = 2.
+- Added unfactor() function (not exported) to assist createBlockIDs() and assg2xBalance().
+- In block(), added argument namesCol, an optional vector of column names for the output of block().
+- In block(), drop variables within groups where variance is 0 and warn.
+- In block(), if a variable has IQR 0 and distance = "mvd" or distance = "mcd", then block() now returns a warning and proceeds using the nonresistant distance = "mahalanobis".
+- Changed behavior of block() and assignment() to output any unblocked units and incomplete blocks.  For consistency with the motivation for the level.two argument, if level.two = TRUE, then unblocked units are listed, but unblocked subunits in units that have a subunit blocked are not listed.
+- Simplified C files' structure
+- In block(), added error message when valid.var is specified, but valid.range is not.
+- Added CITATION file.
+
+
 Version 0.5-6 (1 August 2012)
 - Display bug fix in file block.R (wherein units with distance zero were blocked as desired, but reported as having distance NA).
 

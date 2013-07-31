@@ -1,6 +1,8 @@
 useDynLib(blockTools)
 export( block,
         assignment,
+	assg2xBalance,
+	createBlockIDs,
         diagnose,
         outCSV,
         outTeX

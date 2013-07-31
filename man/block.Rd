@@ -11,8 +11,8 @@
 \usage{
 block(data, vcov.data = NULL, groups = NULL, n.tr = 2, id.vars,
   block.vars = NULL, algorithm = "optGreedy", distance = "mahalanobis",
-  weight = NULL, optfactor = 10^8, row.sort = NULL, level.two = FALSE, 
-  valid.var = NULL, valid.range = NULL, seed, verbose = FALSE, ...)
+  weight = NULL, optfactor = 10^7, row.sort = NULL, level.two = FALSE, 
+  valid.var = NULL, valid.range = NULL, seed, namesCol = NULL, verbose = FALSE, ...)
 }
 
 \arguments{
@@ -33,9 +33,8 @@ block(data, vcov.data = NULL, groups = NULL, n.tr = 2, id.vars,
     for more information.}
   \item{distance}{either a) a string defining how the multivariate
     distance used for blocking is calculated (options include
-    \code{"mahalanobis"}, \code{"mcd"}, and \code{"mve"}), or b) a
-    user-defined $k$-by-$k$ matrix, where $k$ is the number of rows 
-in
+    \code{"mahalanobis"}, \code{"mcd"}, \code{"mve"}, and \code{"euclidean"}), or b) a
+    user-defined $k$-by-$k$ matrix of distances, where $k$ is the number of rows in 
     \code{data}.}
   \item{weight}{either a vector of length equal to the number of blocking 
     variables or a square matrix with dimensions equal to the number of 
@@ -53,6 +52,8 @@ in
   \item{seed}{an optional integer value for the random seed set in
     \code{cov.rob}, used to calculate measures of the
     variance-covariance matrix robust to outliers.}
+  \item{namesCol}{an optional vector of column names for the output
+    table.}
   \item{verbose}{a logical specifying whether \code{groups} names and 
     block numbers are printed as blocks are created.}
   \item{\dots}{additional arguments passed to \code{cov.rob}.}
@@ -81,11 +82,11 @@ information.
 
 If \code{block.vars = NULL}, then all variables in \code{data} except
 the \code{id.vars} are taken as blocking variables.  E.g.,
-\code{block.vars = c("b1", "b2")}. 
+\code{block.vars = c("b1", "b2")}.  
 
 The algorithm \code{optGreedy} calls an optimal-greedy algorithm, repeatedly
 finding the best remaining match in the entire dataset;
-\code{optimal} finds the set of blocks that minimes the sum of the
+\code{optimal} finds the set of blocks that minimizes the sum of the
 distances in all blocks; \code{naiveGreedy} finds the best match
 proceeding down the dataset from the first unit to the last;
 \code{randGreedy} randomly selects a unit, finds its best match, and
@@ -133,11 +134,15 @@ Thus, a distance of \code{99999*max(dist.mat)} is used to effectively
 prohibit blockings.  This follows the procedure demonstrated in the
 example of \code{help(nonbimatch)}.
 
+In order to enable comparisons of block-quality across groups, when
+\code{distance} is a string, $Sigma$ is calculated using units from
+all groups.
+
 The \code{distance = "mcd"} and \code{distance = "mve"} options call
 \code{cov.rob} to calculate measures of multivariate spread robust to
 outliers.  The \code{distance = "mcd"} option calculates the Minimum
 Covariance Determinant estimate (Rousseeuw 1985); the \code{distance = "mve"} option
-calculates the Minimum Volume Ellipsoid estimate (Rousseeuw and van Zomeren 1990).
+calculates the Minimum Volume Ellipsoid estimate (Rousseeuw and van Zomeren 1990).  When \code{distance = "mcd"}, the interquartile range on blocking variables should not be zero.
 
 A user-specified distance matrix must have diagonals equal to 0,
 indicating zero distance between a unit and itself.  Only the lower
@@ -157,7 +162,10 @@ the most similar cities within them.  All subunits in the data should
 have unique names.  Thus, if subunits are numbered 1 to (number of
 subunits in unit) within each unit, then they should be renumbered,
 e.g., 1 to (total number of subunits in all units).  \code{level.two}
-blocking is not currently implemented for \code{algorithm = "optimal"}.
+blocking is not currently implemented for \code{algorithm =
+"optimal"}.  Units with no blocked subunit are put into their own
+blocks.  However, unblocked subunits within a unit that does have a
+blocked subunit are not put into their own blocks.
 
 An example of a variable restriction is \code{valid.var = "b2"},
 \code{valid.range = c(10,50)}, which requires that units in the same
@@ -167,6 +175,9 @@ implemented in all algorithms except \code{optimal}.  Note that
 employing a variable restriction may result in fewer than the maximum
 possible number of blocks.  See
 \url{http://rtm.wustl.edu/software.blockTools.htm} for details.
+
+If \code{namesCol = NULL}, then \dQuote{Unit 1},
+\dQuote{Unit 2}, \ldots are used.  If \code{level.two = FALSE}, then \code{namesCol} should be of length \code{n.tr}; if \code{level.two = TRUE}, then \code{namesCol} should be of length 2*\code{n.tr}, and in the order shown in the example below.
 }
 
 \value{ A list with elements
@@ -190,12 +201,15 @@ for Public Policy Evaluation, with Application to the Mexican Universal
 Health Insurance Program". \emph{Journal of Policy Analysis and
 Management} 26(3):  479-509.
 
+Moore, Ryan T. 2012. "Multivariate Continuous Blocking to Improve Political Science
+Experiments." \emph{Political Analysis} 20(4):460-479.
+
 Rousseeuw, Peter J. 1985. "Multivariate Estimation with High Breakdown Point". \emph{Mathematical Statistics and Applications} 8:283-297.
 
 Rousseeuw, Peter J. and Bert C. van Zomeren. 1990. "Unmasking Multivariate Outliers and Leverage Points". \emph{Journal of the American Statistical Association} 85(411):633-639.
 }
 
-\author{Ryan T. Moore}
+\author{Ryan T. Moore \email{rtm@wustl.edu} and Keith Schnakenberg \email{keith.schnakenberg@gmail.com}}
 
 \seealso{\code{\link{assignment}}, \code{\link{diagnose}}}
 
@@ -211,10 +225,11 @@ out <- block(x100, groups = "g", n.tr = 2, id.vars = c("id"), block.vars
 ##  level one unit:
 for(i in (1:nrow(x100))){if(even(i)){x100$id[i] <- x100$id[i-1]}}
 
-out <- block(x100, groups = "g", n.tr = 2, id.vars = c("id", "id2"),
+out2 <- block(x100, groups = "g", n.tr = 2, id.vars = c("id", "id2"),
               block.vars = c("b1", "b2"), algorithm="optGreedy",
               distance = "mahalanobis", level.two = TRUE, valid.var =
-              "b1", valid.range = c(0,500), verbose = TRUE) 
+              "b1", valid.range = c(0,500), namesCol = c("State 1", "City 1", 
+	      "State 2", "City 2"), verbose = TRUE) 
 }
 
 \keyword{design}

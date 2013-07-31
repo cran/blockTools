@@ -15,8 +15,8 @@ treatment conditions. Write outputs to .tex and .csv files.
 \tabular{ll}{
 Package: \tab blockTools\cr
 Type: \tab Package\cr
-Version: \tab 0.5-6\cr
-Date: \tab 2012-08-01\cr
+Version: \tab 0.5-7\cr
+Date: \tab 2013-07-29\cr
 License: \tab  GPL (>=2)\cr
 }
 Given raw data, \code{block} creates experimental blocks,
@@ -26,7 +26,7 @@ detects possible interference problems, and \code{outTeX} and
 and .csv files, respectively. 
 }
 \author{
-Ryan T. Moore
+Ryan T. Moore \email{rtm@wustl.edu} and Keith Schnakenberg \email{keith.schnakenberg@gmail.com}
 
 Maintainer: Ryan T. Moore \email{rtm@wustl.edu}
 }
@@ -53,4 +53,8 @@ diag <- diagnose(object = assg, data = x100, id.vars = "id",
 outTeX(assg)
 ## create .csv files of unassigned blocks
 outCSV(out)
+## create block IDs
+createBlockIDs(out, x100, id.var = "id")
+## block ID integers are unique, even with several groups
+axb <- assg2xBalance(assg, x100, id.var = "id", bal.vars = c("b1", "b2"))
 }

@@ -8,10 +8,12 @@ out <- block(x100, groups = "g", n.tr = 2, id.vars = c("id"), block.vars
 
 ## To illustrate two-level blocking, with multiple level two units per
 ##  level one unit:
-for(i in (1:nrow(x100))){if(even(i)){x100$id[i] <- x100$id[i-1]}}
+x100.tmp <- x100
+for(i in (1:nrow(x100.tmp))){if(even(i)){x100.tmp$id[i] <- x100.tmp$id[i-1]}}
 rm(i)
 
-out <- block(x100, groups = "g", n.tr = 2, id.vars = c("id", "id2"),
+out2 <- block(x100.tmp, groups = "g", n.tr = 2, id.vars = c("id", "id2"),
               block.vars = c("b1", "b2"), algorithm="optGreedy",
               distance = "mahalanobis", level.two = TRUE, valid.var =
-              "b1", valid.range = c(0,500), verbose = TRUE) 
+              "b1", valid.range = c(0,500), namesCol = 
+              c("State 1", "City 1", "State 2", "City 2"), verbose = TRUE) 

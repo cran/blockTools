@@ -1,9 +1,16 @@
+Version 0.5-8 (8 April 2014)
+- In assignment() and demo/block.R, remove dependence on library(gtools) by replacing odd() and even() with (… %% 2) == 1 and == 0, respectively.
+- Move library(MASS) from Depends: to Imports:
+- In block(), fix bug to correctly attach namesCol values to output object.  
+- In assignment(), correctly attach namesCol values to output object and provide new length options.
+- In block(), fix a bug in valid.var that incorrectly led to an error message.
+
 Version 0.5-7 (30 July 2013)
 - Remove .First.lib (zzz.R)
 - In block(), reformat output from algorithm = "optimal".
 - In block(), changed default optfactor to 10^7 so that vanilla blockings of x100 with groups run successfully.
 - In block(), now print error when user provides invalid "algorithm" argument.
-- Added option block(…, distance = "euclidean", …).
+- Added option block(distance = "euclidean").
 - Changed packages nbpMatching and xtable from "Depends" to "Suggests", to only invoke when needed.
 - Added function createBlockIDs() to output vector of integers to uniquely identify blocks.
 - Added function assg2xBalance() to ease balance calculations for assignment objects where n.tr = 2.

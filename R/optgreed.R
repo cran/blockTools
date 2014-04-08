@@ -1,7 +1,7 @@
 optgreed <- function(x, block.vars, vcov, n.tr, l2, l1names, valid, validvar, validlb, validub, verbose, ismahal, dist){
 vcd <- as.matrix(x[,block.vars])
 vcovi <- solve(vcov)
-if(validvar==0)
+if(is.numeric(validvar) && length(validvar)==1)
   {
     p = (length(unique(l1names)) %/% n.tr) + as.integer((length(unique(l1names)) %% n.tr) > 0)
   }

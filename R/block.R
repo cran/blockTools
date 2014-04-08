@@ -36,7 +36,11 @@ the data.  Respecify 'row.sort'.")
   if(is.null(block.vars)){
     block.vars <- names(data)[!(names(data) %in% id.vars)]
   }
- 
+  if(!is.null(namesCol)){
+	if(level.two==FALSE && length(namesCol) != n.tr){stop("The length of namesCol should equal n.tr") }
+	else if(level.two==TRUE && length(namesCol) != 2*n.tr){stop("When level.two==TRUE, the length of namesCol should equal 2*n.tr")}
+  }
+
   ## subset appropriate columns for vcov calculation
   if(is.null(vcov.data)){  
     vcov.data <- data[, block.vars]
@@ -252,22 +256,14 @@ identification variable and re-block.")
     storage1[storage1 == 0 & col(storage1) < ncol(storage1)] <- NA
 #    storage1[storage1[,1:(ncol(storage1)-1)]==0, 1:(ncol(storage1)-1)] <- NA
     count <- 1
-    
+
     if(algorithm != "optimal"){
       for(col.idx in 1:(ncol(out1)-1)){
         storage1$temp <- as.character(data.gp[storage1[, col.idx], id.vars[1]])
         storage1$temp2 <- as.character(data.gp[storage1[, col.idx], id.vars[length(id.vars)]])
-        if(is.null(namesCol)){
-          names(storage1)[ncol(out1) + count] <- paste("Unit", col.idx)
-        }else{
-          names(storage1)[ncol(out1) + count] <- namesCol[count]
-        }
+        names(storage1)[ncol(out1) + count] <- paste("Unit", col.idx)
         count <- count + 1
-        if(is.null(namesCol)){
-          names(storage1)[ncol(out1) + count] <- paste("Subunit", col.idx)
-        }else{
-          names(storage1)[ncol(out1) + count] <- namesCol[count]          
-        }
+        names(storage1)[ncol(out1) + count] <- paste("Subunit", col.idx)
         count <- count + 1
       }
     }
@@ -318,12 +314,14 @@ identification variable and re-block.")
       storage <- storage.tmp
       rm(storage.tmp)
     }
-                                    
+    if(!is.null(namesCol)){
+        names(storage)[1:(ncol(storage) - 1)] <- namesCol
+    }
+   
     ## function to count NA, to remove empty rows (for valid.var)
     sum.na <- function(sum.na.vector){return(sum(is.na(sum.na.vector)))}
     ## remove empty rows
     storage <- storage[apply(storage[, 1:(ncol(storage)-1)], 1, sum.na) != (ncol(storage)-1), ]
-    
     rownames(storage) <- 1:(nrow(storage))
     out[[gp]] <- storage
   } 

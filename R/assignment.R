@@ -40,6 +40,14 @@ assignment <- function(block.obj, seed = NULL, namesCol = NULL){
           namesCol[(2*j-1):(2*j)] <- rep(paste("Treatment ", j, sep = ""),2)
         }
       }
+    }else{ ## if !is.null(namesCol)
+      if(length(namesCol) == (ncol.tab - 1)){ ## if user gives only names for assignments, not distance
+        if(block.obj$call$n.tr == 2){
+          namesCol <- append(namesCol, "Distance")
+        }else{
+          namesCol <- append(namesCol, "Max Distance")
+        }
+      }
     }
               
     ## Put units into treatment groups with pr(u_i in g_j) = 1/|g|    
@@ -48,7 +56,7 @@ assignment <- function(block.obj, seed = NULL, namesCol = NULL){
       if(block.obj$level.two == FALSE){
         tmp[1:(ncol.tab-1)] <- tmp[sample(ncol.tab-1)]
       }else{
-        s <- sample((1:(ncol.tab-1))[odd(1:(ncol.tab-1))])
+        s <- sample((1:(ncol.tab-1))[((1:(ncol.tab-1)) %% 2 == 1)]) ## replaced [odd(...)] 8 April 2014
         tmp[1:(ncol.tab-1)] <- tmp[c(rbind(s,s+1))]
       }
       gp.obj[j,] <- tmp

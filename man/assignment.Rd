@@ -31,7 +31,13 @@ Specifying the random seed yields constant assignment, and thus allows
 for easy replication of experimental protocols.
 
 If \code{namesCol = NULL}, then \dQuote{Treatment 1},
-\dQuote{Treatment 2}, \ldots are used.  
+\dQuote{Treatment 2}, \ldots are used.  If \code{namesCol} is supplied by the user 
+and is of length \code{n.tr} (or 2*\code{n.tr}, where \code{level.two = TRUE}), 
+then either \code{"Distance"} or \code{"Max Distance"} is appended to it as 
+appropriate (consistent with \code{namesCol} usage in \code{block}).  If 
+\code{namesCol} is supplied and is of length \code{n.tr}+1 (or 2*\code{n.tr}+1, 
+where \code{level.two = TRUE}), then the last user-supplied name is used for the 
+last column of each dataframe.
 }
 
 \value{A list with elements

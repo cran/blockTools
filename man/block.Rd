@@ -223,7 +223,7 @@ out <- block(x100, groups = "g", n.tr = 2, id.vars = c("id"), block.vars
 
 ## To illustrate two-level blocking, with multiple level two units per
 ##  level one unit:
-for(i in (1:nrow(x100))){if(even(i)){x100$id[i] <- x100$id[i-1]}}
+for(i in (1:nrow(x100))){if((i \%\% 2) == 0){x100$id[i] <- x100$id[i-1]}}
 
 out2 <- block(x100, groups = "g", n.tr = 2, id.vars = c("id", "id2"),
               block.vars = c("b1", "b2"), algorithm="optGreedy",

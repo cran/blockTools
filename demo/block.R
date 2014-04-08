@@ -9,7 +9,7 @@ out <- block(x100, groups = "g", n.tr = 2, id.vars = c("id"), block.vars
 ## To illustrate two-level blocking, with multiple level two units per
 ##  level one unit:
 x100.tmp <- x100
-for(i in (1:nrow(x100.tmp))){if(even(i)){x100.tmp$id[i] <- x100.tmp$id[i-1]}}
+for(i in (1:nrow(x100.tmp))){if((i %% 2) == 0){x100.tmp$id[i] <- x100.tmp$id[i-1]}}
 rm(i)
 
 out2 <- block(x100.tmp, groups = "g", n.tr = 2, id.vars = c("id", "id2"),

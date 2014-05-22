@@ -12,7 +12,7 @@
 block(data, vcov.data = NULL, groups = NULL, n.tr = 2, id.vars,
   block.vars = NULL, algorithm = "optGreedy", distance = "mahalanobis",
   weight = NULL, optfactor = 10^7, row.sort = NULL, level.two = FALSE, 
-  valid.var = NULL, valid.range = NULL, seed, namesCol = NULL, verbose = FALSE, ...)
+  valid.var = NULL, valid.range = NULL, seed.dist, namesCol = NULL, verbose = FALSE, ...)
 }
 
 \arguments{
@@ -26,7 +26,7 @@ block(data, vcov.data = NULL, groups = NULL, n.tr = 2, id.vars,
   \item{id.vars}{a required string or vector of two strings specifying which
     column(s) of \code{data} contain identifying information.}
   \item{block.vars}{an optional string or vector of strings specifying which
-    column(s) of \code{data} contain the blocking variables.}
+    column(s) of \code{data} contain the numeric blocking variables.}
   \item{algorithm}{a string specifying the blocking algorithm.
     \code{"optGreedy"}, \code{"optimal"}, \code{"naiveGreedy"}, \code{"randGreedy"}, and
     \code{"sortGreedy"} algorithms are currently available.  See Details
@@ -49,7 +49,7 @@ block(data, vcov.data = NULL, groups = NULL, n.tr = 2, id.vars,
     \code{valid.range}.} 
   \item{valid.range}{an optional vector defining the range of
     \code{valid.var} within which units in the same block must fall.}
-  \item{seed}{an optional integer value for the random seed set in
+  \item{seed.dist}{an optional integer value for the random seed set in
     \code{cov.rob}, used to calculate measures of the
     variance-covariance matrix robust to outliers.}
   \item{namesCol}{an optional vector of column names for the output

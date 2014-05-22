@@ -1,3 +1,10 @@
+Version 0.6-1 (22 May 2014)
+*** New ***
+- Added function seqblock() for sequential experiments
+- Added function invertRIconfInt() to create confidence intervals by inverting the randomization test
+- Added function block2seqblock() to translate output from block() to input for seqblock(), for when experiment starts with many units, then adds new units sequentially after initial set of assignments.
+- Added manual files for seqblock(), invertRIconfInt(), and block2seqblock()
+
 Version 0.5-8 (8 April 2014)
 - In assignment() and demo/block.R, remove dependence on library(gtools) by replacing odd() and even() with (… %% 2) == 1 and == 0, respectively.
 - Move library(MASS) from Depends: to Imports:

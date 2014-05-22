@@ -15,15 +15,15 @@ treatment conditions. Write outputs to .tex and .csv files.
 \tabular{ll}{
 Package: \tab blockTools\cr
 Type: \tab Package\cr
-Version: \tab 0.5-8\cr
-Date: \tab 2014-04-08\cr
+Version: \tab 0.6-1\cr
+Date: \tab 2014-05-22\cr
 License: \tab  GPL (>=2)\cr
 }
 Given raw data, \code{block} creates experimental blocks,
 \code{assignment} assigns units to treatment conditions, \code{diagnose}
 detects possible interference problems, and \code{outTeX} and
 \code{outCSV} write block or assignment output objects to a set of .tex
-and .csv files, respectively. 
+and .csv files, respectively.  In sequential experiments, \code{seqblock} assigns units to treatment conditions.
 }
 \author{
 Ryan T. Moore \email{rtm@wustl.edu} and Keith Schnakenberg \email{keith.schnakenberg@gmail.com}

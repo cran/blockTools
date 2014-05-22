@@ -5,7 +5,10 @@ export( block,
 	createBlockIDs,
         diagnose,
         outCSV,
-        outTeX
+        outTeX,
+	seqblock,
+	invertRIconfInt,
+	block2seqblock
 )
 import(MASS)
 

@@ -1,7 +1,7 @@
 block <- function(data, vcov.data = NULL, groups = NULL, n.tr = 2, id.vars,
                   block.vars = NULL, algorithm = "optGreedy", distance =
                   "mahalanobis", weight = NULL, optfactor = 10^7, row.sort = NULL, 
-                  level.two = FALSE, valid.var = NULL, valid.range = NULL, seed, 
+                  level.two = FALSE, valid.var = NULL, valid.range = NULL, seed.dist, 
                   namesCol = NULL, verbose = FALSE, ...){ 
   
   if(is.null(algorithm)){
@@ -34,7 +34,7 @@ the data.  Respecify 'row.sort'.")
   }
  
   if(is.null(block.vars)){
-    block.vars <- names(data)[!(names(data) %in% id.vars)]
+    block.vars <- names(data)[!(names(data) %in% c(id.vars, groups))]
   }
   if(!is.null(namesCol)){
 	if(level.two==FALSE && length(namesCol) != n.tr){stop("The length of namesCol should equal n.tr") }
@@ -69,10 +69,10 @@ the data.  Respecify 'row.sort'.")
       vc.all <- var(vcov.data)
     }
     if(distance == "mcd"){
-      vc.all <- cov.rob(vcov.data, method="mcd", seed = seed, ...)$cov
+      vc.all <- cov.rob(vcov.data, method="mcd", seed = seed.dist, ...)$cov
       }
     if(distance == "mve"){
-      vc.all <- cov.rob(vcov.data, method="mve", seed = seed, ...)$cov
+      vc.all <- cov.rob(vcov.data, method="mve", seed = seed.dist, ...)$cov
     }
     if(distance == "euclidean"){
       vc.all <- diag(ncol(vcov.data))
@@ -195,7 +195,7 @@ identification variable and re-block.")
                          validub = as.double(validub),
                          verbose = as.integer(verbose),
                          ismahal=is.character(distance)
-          )
+                         )
       }
       else if(algorithm  %in%   c("naiveGreedy", "randGreedy", "sortGreedy")){
         out1 <- naive(x= data.gp,

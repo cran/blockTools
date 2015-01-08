@@ -8,8 +8,8 @@ Sequentially assign units into experimental conditions. Blocking begins by creat
 \usage{
 seqblock(object = NULL, id.vars, id.vals, exact.vars = NULL, exact.vals = NULL, 
   exact.restr = NULL, exact.alg = "single", covar.vars = NULL, covar.vals = NULL, 
-  covar.restr = NULL, covars.ord = NULL, n.tr = 2, tr.names = NULL, assg.prob = NULL, 
-  seed = NULL, seed.dist, assg.prob.stat = NULL, trim = NULL, assg.prob.method = NULL, 
+  covar.restr = NULL, covars.ord = NULL, n.tr = 2, tr.names = NULL, assg.prob = NULL,
+  seed = NULL, seed.dist, assg.prob.stat = NULL, trim = NULL, assg.prob.method = NULL,
   assg.prob.kfac = NULL, distance = NULL, file.name = NULL, query = FALSE, 
   verbose = TRUE, ...)
 }
@@ -49,7 +49,7 @@ However, the function can be called for subsequent units even when \code{object}
 
 If the \code{object} and \code{file.name} arguments are set to the same value, then \code{seqblock} overwrites the specified file with a new file, which now contains both the previously-assigned units and the newly-assigned unit. To create a new file when a new unit is assigned, use a new \code{file.name}. 
 
-The \code{single} algorithm (see \code{exact.alg} in the Arguments section above) creates a variable that has a unique level for every possible combination of the exact variables. As an example, say that there were 3 exact blocking variables: \emph{party} (Democrat, Republican); \emph{region} (North, South); and \emph{education} (HS, NHS). The \code{single} algorithm creates one level for units with the following values: Democrat-North-HS. It would create another level for Democrat-North-NHS; a third level for Republican-North-HS; and so forth, until every possible combination of these 3 variables has its own level. Thus if there are \emph{k} exact blocking variables and each exact blocking variable has $\emph{q_{i}}$ values it can take on, then there are a total of $\eqn{\prod_{1}^{k} q_{i}}$ levels created.
+The \code{single} algorithm (see \code{exact.alg} in the Arguments section above) creates a variable that has a unique level for every possible combination of the exact variables. As an example, say that there were 3 exact blocking variables: \emph{party} (Democrat, Republican); \emph{region} (North, South); and \emph{education} (HS, NHS). The \code{single} algorithm creates one level for units with the following values: Democrat-North-HS. It would create another level for Democrat-North-NHS; a third level for Republican-North-HS; and so forth, until every possible combination of these 3 variables has its own level. Thus if there are \eqn{k} exact blocking variables and each exact blocking variable has \eqn{q_{i}} values it can take on, then there are a total of \eqn{\prod_{1}^{k} q_{i}} levels created.
 
 The \code{distance = "mcd"} and \code{distance = "mve"} options call \code{cov.rob} to calculate measures of multivariate spread robust to outliers. The \code{distance = "mcd"} option calculates the Minimum Covariance Determinant estimate (Rousseeuw 1985); the \code{distance = "mve"} option calculates the Minimum Volume Ellipsoid estimate (Rousseeuw and van Zomeren 1990). When \code{distance = "mcd"}, the interquartile range on blocking variables should not be zero. The \code{distance = "euclidean"} option calculates the Euclidean distance between the new unit and the previously-assigned units. The default \code{distance = "mahalanobis"} option calculates the Mahalanobis distance.
 }
@@ -97,8 +97,7 @@ Rousseeuw, Peter J. and Bert C. van Zomeren. 1990. "Unmasking Multivariate Outli
 ## Assign first unit (assume a 25 year old member of the Republican Party) to a treatment group.
 ## Save the results in file "sdata.RData":
 ## seqblock(query = FALSE, id.vars = "ID", id.vals = 001, exact.vars = "party", 
-##   exact.vals = "Republican", covar.vars = "age", covar.vals = 25, 
-##   file.name = "sdata.RData")
+##   exact.vals = "Republican", covar.vars = "age", covar.vals = 25, file.name = "sdata.RData")
 
 ## Assign next unit (age 30, Democratic Party):
 ## seqblock(query = FALSE, object = "sdata.RData", id.vals = 002, exact.vals = "Democrat", 

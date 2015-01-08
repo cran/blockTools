@@ -3,7 +3,7 @@ mahal <- function(q, vc){
   q <- as.matrix(q)
   ## generate a matrix of Mahalanobis distances between all possible pairs
   for(i in 1:nrow(q)){
-    storage[row(q),i] <- sqrt(mahalanobis(x=q, center=q[i,], cov=vc))
+    storage[row(q), i] <- sqrt(mahalanobis(x = q, center = q[i,], cov = vc))
   }
   return(storage)
 }

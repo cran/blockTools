@@ -1,3 +1,11 @@
+Version 0.6-2 (8 January 2015)
+- In block(), drop variables where variance is 0 overall and warn the user.
+- In block(), eliminate removal of blocking variables with 0 variance within a group, since scaling matrix is not caculated for each group.
+- In block(), fix instances where optgreed.c and naive.c returned errors for groups with only one unit.
+- Bug fixes and documentation editing for seqblock() and block2seqblock().
+- Updated Maintainer and Author affiliation.
+- Update title capitalization and replace require() libraries with :: to conform to Writing R Extensions guidelines.
+
 Version 0.6-1 (22 May 2014)
 *** New ***
 - Added function seqblock() for sequential experiments

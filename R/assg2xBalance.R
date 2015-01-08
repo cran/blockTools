@@ -1,6 +1,6 @@
 assg2xBalance <- function(assg.obj, data, id.var, bal.vars, to.report = "all"){
   
-  require("RItools")
+  ## require("RItools")
   
   tr.vec <- rep(NA, nrow(data))
   fff <- formula(paste("Tr ~ ", paste(bal.vars, collapse = "+")))
@@ -19,12 +19,12 @@ assg2xBalance <- function(assg.obj, data, id.var, bal.vars, to.report = "all"){
     
     data.tr.gp <- data.frame(cbind(data[wh.gp, ], Tr=tr.vec[wh.gp]))
     
-    xbal.out <- xBalance(fff, data = data.tr.gp, report = c(to.report))
+    xbal.out <- RItools::xBalance(fff, data = data.tr.gp, report = c(to.report))
     xbal.list[[paste("Group", i, sep="")]] <- xbal.out
   }
   
   data.tr <- data.frame(cbind(data, Tr = tr.vec))
   data.tr <- data.tr[!(is.na(data.tr$Tr)), ]
-  xbal.list[["Overall"]] <- xBalance(fff, data = data.tr, report = c(to.report))
+  xbal.list[["Overall"]] <- RItools::xBalance(fff, data = data.tr, report = c(to.report))
   return(xbal.list)	
 }

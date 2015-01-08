@@ -5,7 +5,6 @@ block <- function(data, vcov.data = NULL, groups = NULL, n.tr = 2, id.vars,
                   namesCol = NULL, verbose = FALSE, ...){ 
   
   if(is.null(algorithm)){
-
     stop("Blocking algorithm is unspecified.  See documentation for
 options.")
   }
@@ -37,8 +36,9 @@ the data.  Respecify 'row.sort'.")
     block.vars <- names(data)[!(names(data) %in% c(id.vars, groups))]
   }
   if(!is.null(namesCol)){
-	if(level.two==FALSE && length(namesCol) != n.tr){stop("The length of namesCol should equal n.tr") }
-	else if(level.two==TRUE && length(namesCol) != 2*n.tr){stop("When level.two==TRUE, the length of namesCol should equal 2*n.tr")}
+    if(level.two == FALSE && length(namesCol) != n.tr){
+      stop("The length of namesCol should equal n.tr") 
+    }else if(level.two == TRUE && length(namesCol) != 2*n.tr){stop("When level.two == TRUE, the length of namesCol should equal 2*n.tr")}
   }
 
   ## subset appropriate columns for vcov calculation
@@ -46,6 +46,11 @@ the data.  Respecify 'row.sort'.")
     vcov.data <- data[, block.vars]
   }else{
     vcov.data <- vcov.data[, block.vars]
+  }
+  vcov.data <- as.data.frame(vcov.data)
+  ## If ncol(vcov.data) == 1, make data frame and fix name:
+  if(ncol(vcov.data) == 1){
+    names(vcov.data) <- block.vars
   }
   
   ## calculate variance using all groups' units
@@ -66,11 +71,27 @@ the data.  Respecify 'row.sort'.")
     }
     
     if(distance == "mahalanobis"){
+      ## Cut variables with no variation at all:
+      blvar.cut <- NULL
+      for(blvar.idx in 1:length(block.vars)){
+        if(isTRUE(all.equal(var(vcov.data[, block.vars[blvar.idx]]), 0))){
+          blvar.cut <- append(blvar.cut, blvar.idx)
+        }
+      }
+      if(length(blvar.cut) != 0){
+        warning(paste("The following blocking variables have zero variance and are dropped: ", paste(block.vars[blvar.cut], collapse = ", "), sep = ""))
+        block.vars <- block.vars[-(blvar.cut)]
+      }
+      
+      ## After cutting variables w/o variation, redefine vcov.data:
+      vcov.data <- vcov.data[, block.vars]
+      ## Calculate vcov matrix for Mahalanobis scaling:
       vc.all <- var(vcov.data)
     }
+    
     if(distance == "mcd"){
       vc.all <- cov.rob(vcov.data, method="mcd", seed = seed.dist, ...)$cov
-      }
+    }
     if(distance == "mve"){
       vc.all <- cov.rob(vcov.data, method="mve", seed = seed.dist, ...)$cov
     }
@@ -87,7 +108,7 @@ the data.  Respecify 'row.sort'.")
       weight <- diag(weight)
     }
     if(is.matrix(weight)){
-           if(sum(dim(weight)==dim(vc.all)) != 2){
+           if(sum(dim(weight) == dim(vc.all)) != 2){
       	stop("Weight matrix dimensions must equal number of blocking variables.  Respecify 'weight'.")
       }
     }
@@ -109,7 +130,7 @@ the data.  Respecify 'row.sort'.")
   if(is.factor(data[, groups])){
     data[, groups] <- as.character(data[, groups])
   }
-  gp.names <- unique(data[,groups])
+  gp.names <- unique(data[, groups])
   
   ## perform blocking w/in groups
   for(i in unique(data[, groups])){ 
@@ -122,21 +143,6 @@ the data.  Respecify 'row.sort'.")
     
     data.gp <- data[data[, groups]==i, c(id.vars, block.vars)]
 
-    ## Drop variables in group = gp with no variance:
-     blvar.cut <- NULL
-     for(blvar.idx in 1:length(block.vars)){
-       if(isTRUE(all.equal(var(data.gp[, block.vars[blvar.idx]]), 0))){
-         append(blvar.cut, blvar.idx)
-       }
-       if(length(blvar.cut) != 0){
-         block.vars <- block.vars[!(blvar.cut)]
-         warning(paste("The following blocking variables have zero variance 
-                       in group ", i, ", and are dropped.\n
-                       Variables: ", block.vars[blvar.cut], "\nMD's across groups 
-                       may not be directly comparable.", sep = ""))
-       }  
-     }
-    
     level.one.names <- data.gp[, id.vars[1]]
     
     if(level.two == TRUE){
@@ -174,16 +180,16 @@ identification variable and re-block.")
     }
   
     if(!is.character(distance)){
-            dist.mat <- distance[data[,groups]==i, data[,groups]==i]
-          }
-    else{
-      nnn <- sum(as.integer(data[,groups]==i))
-      dist.mat <- matrix(0, nrow=nnn, ncol=nnn)
+            dist.mat <- distance[data[, groups] == i, data[, groups] == i]
+    }else{
+      nnn <- sum(as.integer(data[, groups] == i))
+      dist.mat <- matrix(0, nrow = nnn, ncol = nnn)
     }
     if(algorithm != "optimal"){
       if(algorithm == "optGreedy"){
         out1 <- optgreed(x = data.gp,
                          block.vars = block.vars,
+                         id.vars = id.vars,
                          dist = dist.mat,
                          vcov = vc.all,
                          n.tr = n.tr,
@@ -198,19 +204,20 @@ identification variable and re-block.")
                          )
       }
       else if(algorithm  %in%   c("naiveGreedy", "randGreedy", "sortGreedy")){
-        out1 <- naive(x= data.gp,
-                      block.vars=block.vars,
-                      vcov=vc.all,
-                      n.tr=n.tr,
-                      l2=level.two,
-                      l1names=level.one.names,
-                      valid=as.integer(valid),
+        out1 <- naive(x = data.gp,
+                      block.vars = block.vars,
+                      id.vars = id.vars,
+                      vcov = vc.all,
+                      n.tr = n.tr,
+                      l2 = level.two,
+                      l1names = level.one.names,
+                      valid = as.integer(valid),
                       validvar = as.double(validvar),
                       validlb = as.double(validlb),
                       validub = as.double(validub),
                       verbose=as.integer(verbose),
                       dist = dist.mat,
-                      ismahal=is.character(distance)
+                      ismahal = is.character(distance)
                       )
       }
     }
@@ -219,14 +226,14 @@ identification variable and re-block.")
 #      if(require("nbpMatching") == FALSE){
 #        stop("The package 'nbpMatching' must be installed to block using the 'optimal' algorithm.")
 #      }
-      require("nbpMatching")
+#      require("nbpMatching")
     	 if(n.tr > 2){
     	  warning("You specified algorithm = optimal and n.tr > 2.  However, optimal blocking only implemented for exactly two treatment conditions.  If no other error is encountered, optimal blocks for n.tr = 2 are returned here.")
     	 }
       if(is.character(distance)){
         dist.mat <- mahal(data.block, vc.all)
       }else{      
-        dist.mat <- distance[data[, groups]==i, data[, groups]==i]
+        dist.mat <- distance[data[, groups] == i, data[, groups] == i]
       }
 
       if(!is.null(valid.var)){
@@ -243,8 +250,8 @@ identification variable and re-block.")
         ##dist.mat[!valid.vec] <- 2147483647 #maximum 32 bit integer
       }
 
-      optimalDistanceMatrix <- distancematrix(dist.mat)
-      optimalOutput <- nonbimatch(optimalDistanceMatrix, precision = 9)
+      optimalDistanceMatrix <- nbpMatching::distancematrix(dist.mat)
+      optimalOutput <- nbpMatching::nonbimatch(optimalDistanceMatrix, precision = 9)
       optimalOutput$halves$Distance <- as.double(optimalOutput$halves$Distance)/optfactor
                                         #      optimalOutput$halves[, 1] <- level.one.names[optimalOutput$halves[, 1]] 
                                         #      optimalOutput$halves[, 2] <- level.one.names[optimalOutput$halves[, 2]]

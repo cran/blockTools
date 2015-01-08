@@ -1,6 +1,6 @@
 outTeX <- function(block.obj, namesCol = NULL, file.names = NULL, captions = NULL, digits = 2, ...){
 
-  require("xtable")
+  #require("xtable")
   
   ## takes block, assignment, or diagnose object
   if(!is.null(block.obj$blocks)){ 
@@ -35,7 +35,7 @@ outTeX <- function(block.obj, namesCol = NULL, file.names = NULL, captions = NUL
     	lab <- paste("t:", file.names[[i]], sep = "")
     }
     
-    tab.tex <- xtable(tab, label = lab, caption = caption, align =
+    tab.tex <- xtable::xtable(tab, label = lab, caption = caption, align =
                       c(rep("c",ncol(tab)+1)), 
                       digits = rep(digits, ncol(tab)+1), ...)
                                             

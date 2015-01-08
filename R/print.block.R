@@ -1,7 +1,7 @@
 print.block <- function(x, digits = max(2, getOption("digits") - 4),
                         ...){
   cat("\nBlocks:\n\n")
-  if(length(x$blocks)==1){
+  if(length(x$blocks) == 1){
     print.default(format(as.matrix(x$blocks[[1]]), digits = digits),
                   print.gap = 2, quote = FALSE, ...)
   }else{

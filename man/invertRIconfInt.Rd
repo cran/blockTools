@@ -10,8 +10,8 @@ Using an output object from \code{seqblock} or any other matrix or dataframe tha
 invertRIconfInt(dat, outcome.var, tr.var, tau.abs.min = -1, tau.abs.max = 1, 
   tau.length = 10, n.sb.p = 100, id.vars, id.vals, exact.vars = NULL, exact.vals = NULL,
   exact.restr = NULL, exact.alg = "single", covar.vars = NULL, covar.vals = NULL, 
-  covar.restr = NULL, covars.ord = NULL, n.tr = 2, tr.names = NULL, assg.prob = NULL, 
-  seed = NULL, seed.dist, assg.prob.stat = NULL, trim = NULL, assg.prob.method = NULL,
+  covar.restr = NULL, covars.ord = NULL, n.tr = 2, tr.names = NULL, assg.prob = NULL,
+  seed = NULL, seed.dist, assg.prob.stat = NULL, trim = NULL, assg.prob.method = NULL, 
   assg.prob.kfac = NULL, distance = "mahalanobis", file.name = "sbout.RData", 
   query = FALSE, verbose = TRUE)
 }
@@ -72,9 +72,9 @@ Ho, Daniel E., and Kosuke Imai. 2006. "Randomization inference with natural expe
 
 \seealso{\code{\link{seqblock}}}
 \examples{
-## Create an example data matrix with 50 observations that contains an ID variable for every
-##   unit, a dummy variable indicating gender, an age variable (between 18 and 55), 
-##   a treatment variable and an outcome variable (between 15 and 20):
+## Create an example data matrix with 50 observations that contains an ID variable, 
+##   a dummy variable indicating gender, an age variable (between 18 and 55), a 
+##   treatment variable and an outcome variable (between 15 and 20). 
 ## id <- seq(1,50,1)
 ## gender <- sample(c(1,2),50,replace=T)
 ## age <- sample(seq(18,55,1),50,replace=T)
@@ -87,8 +87,8 @@ Ho, Daniel E., and Kosuke Imai. 2006. "Randomization inference with natural expe
 
 ## Run invertRIconfInt()
 ## invertRIconfInt(data, outcome.var="out", tr.var="treat", tau.abs.min = -3, 
-##   tau.abs.max = 3, id.vars = "id", id.vals = "id", exact.vars = c("gender", "age"), 
-##   exact.vals = c("gender", "age"))
+##  tau.abs.max = 3, id.vars = "id", id.vals = "id", exact.vars = c("gender", "age"), 
+##  exact.vals = c("gender", "age"))
 }
 
 \keyword{design}

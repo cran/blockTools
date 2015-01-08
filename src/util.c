@@ -47,9 +47,9 @@ int findMin(double *dist, int lb, int ub, int mmn)/* find minimum value over ran
 	  if(dist[ind]==myMin)
 	    {
 	      tt++;
-	      /*	      GetRNGstate();*/
-	      r = rand();
-	      /*	      PutRNGstate();*/
+	      GetRNGstate();
+	      r = unif_rand();
+	      PutRNGstate();
 	      if(r < pow(tt, -1))
 		{
 		  myMn = ind;

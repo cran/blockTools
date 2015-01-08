@@ -174,7 +174,7 @@ variable \code{"b2"}.  As of version 0.5-3, variable restrictions are
 implemented in all algorithms except \code{optimal}.  Note that
 employing a variable restriction may result in fewer than the maximum
 possible number of blocks.  See
-\url{http://rtm.wustl.edu/software.blockTools.htm} for details.
+\url{http://ryantmoore.com/software.blockTools.htm} for details.
 
 If \code{namesCol = NULL}, then \dQuote{Unit 1},
 \dQuote{Unit 2}, \ldots are used.  If \code{level.two = FALSE}, then \code{namesCol} should be of length \code{n.tr}; if \code{level.two = TRUE}, then \code{namesCol} should be of length 2*\code{n.tr}, and in the order shown in the example below.
@@ -209,7 +209,7 @@ Rousseeuw, Peter J. 1985. "Multivariate Estimation with High Breakdown Point". \
 Rousseeuw, Peter J. and Bert C. van Zomeren. 1990. "Unmasking Multivariate Outliers and Leverage Points". \emph{Journal of the American Statistical Association} 85(411):633-639.
 }
 
-\author{Ryan T. Moore \email{rtm@wustl.edu} and Keith Schnakenberg \email{keith.schnakenberg@gmail.com}}
+\author{Ryan T. Moore \email{rtm@american.edu} and Keith Schnakenberg \email{keith.schnakenberg@gmail.com}}
 
 \seealso{\code{\link{assignment}}, \code{\link{diagnose}}}
 

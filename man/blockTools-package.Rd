@@ -2,7 +2,7 @@
 \alias{blockTools-package}
 \alias{blockTools}
 \docType{package}
-\title{Block, randomly assign, and diagnose potential interference in randomized experiments}
+\title{Block, Randomly Assign, and Diagnose Potential Interference in Randomized Experiments}
 \description{Block units into experimental blocks, with one unit per
 treatment condition, by creating a measure of multivariate distance
 between all possible pairs of units.  Maximum, minimum, or an
@@ -15,8 +15,8 @@ treatment conditions. Write outputs to .tex and .csv files.
 \tabular{ll}{
 Package: \tab blockTools\cr
 Type: \tab Package\cr
-Version: \tab 0.6-1\cr
-Date: \tab 2014-05-22\cr
+Version: \tab 0.6-2\cr
+Date: \tab 2015-01-08\cr
 License: \tab  GPL (>=2)\cr
 }
 Given raw data, \code{block} creates experimental blocks,
@@ -26,12 +26,12 @@ detects possible interference problems, and \code{outTeX} and
 and .csv files, respectively.  In sequential experiments, \code{seqblock} assigns units to treatment conditions.
 }
 \author{
-Ryan T. Moore \email{rtm@wustl.edu} and Keith Schnakenberg \email{keith.schnakenberg@gmail.com}
+Ryan T. Moore \email{rtm@american.edu} and Keith Schnakenberg \email{keith.schnakenberg@gmail.com}
 
-Maintainer: Ryan T. Moore \email{rtm@wustl.edu}
+Maintainer: Ryan T. Moore \email{rtm@american.edu}
 }
 \references{
-\url{http://rtm.wustl.edu/software.blockTools.htm}
+\url{http://ryantmoore.com/software.blockTools.htm}
 }
 
 \keyword{ package }

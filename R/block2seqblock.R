@@ -88,7 +88,10 @@ block2seqblock <- function(block.obj, assg.obj, data, exact.restr = NULL, covar.
           }
         }
       }
-    } else{covar.vars <- colnames(data)[which(colnames(data)!=c(id.vars, exact.vars))]}
+    } else{
+      covar.vars <- colnames(data)[which(colnames(data) != id.vars)]
+      covar.vars <- covar.vars[which(covar.vars != exact.vars)]    
+    }
 
   ## Create trn object
   if(is.null(trn)){
@@ -139,8 +142,11 @@ block2seqblock <- function(block.obj, assg.obj, data, exact.restr = NULL, covar.
   if(!is.null(seed)){
     set.seed(seed)
   }
-  x <- data[,which(colnames(data) %in% c(id.vars, exact.vars, covar.vars))]
-  x <- as.data.frame(x)
+  x1 <- data[, which(colnames(data) %in% id.vars)]
+  x2 <- data[, which(colnames(data) %in% exact.vars)]
+  x3 <- data[, which(colnames(data) %in% covar.vars)]
+  x <- as.data.frame(cbind(x1, x2, x3), stringsAsFactors = FALSE) 
+  colnames(x) <- c(id.vars, exact.vars, covar.vars)
   ## Draw treatment assignments from original assignment object:
   assg <- assg.obj[[1]]
   treat.assign <- vector(mode = "list", length = length(trn))
@@ -158,6 +164,12 @@ block2seqblock <- function(block.obj, assg.obj, data, exact.restr = NULL, covar.
   }
   x <- cbind(x, treatment)
   colnames(x)[ncol(x)] <- "Tr"
+  
+  for(i in 1:ncol(x)){
+    if(class(x[,i]) == "factor"){
+      x[,i] <- as.character(x[,i])
+    }
+  }
   
   bdata <- list()
   bdata$x <- x

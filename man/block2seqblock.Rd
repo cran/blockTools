@@ -38,6 +38,10 @@ block2seqblock(block.obj, assg.obj, data, exact.restr = NULL, covar.restr = NULL
 }
 \details{
 The function converts data from a blocked experiment into a form allowing subsequent sequential blocking.  Minimally, the user sets only the arguments \code{block.obj}, \code{assg.obj} and \code{data}.  Then, \code{block2seqblock} uses the call to \code{block}, the assignment object, and the original data to create an object that is ready to be input into \code{seqblock}.
+
+If the user explicitly specifies \code{groups}, \code{id.vars} and \code{block.vars} in the initial \code{block} function that is used to create the \code{block.obj}, \code{block2seqblock} will order the variables in the output it produces according to the order specified in the initial \code{block} function call. If the user does not explicitly specify the blocking variables in the \code{block} function call, \code{block2seqblock} will order the variables according to the order in the initial matrix or dataframe that was used to run the original \code{block} function.
+
+As part of the function, variables that are of class \code{factor} in the original matrix or dataframe specified in \code{data}, will be converted into class \code{character}. 
  
 The \code{trn} argument uses the \code{n.tr} argument from \code{block} to extract the names of the treatment variables. Most other arguments are set to default values that mirror those in the \code{seqblock} function.  One exception is the \code{datetime} argument, which defaults to a vector of \code{NA}'s instead of the current datetime.}
 

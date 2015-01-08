@@ -1,7 +1,7 @@
 print.assg <- function(x, digits = max(2, getOption("digits") - 4),
                         ...){
   cat("\nAssignments:\n\n")
-  if(length(x$assg)==1){
+  if(length(x$assg) == 1){
     print.default(format(as.matrix(x$assg[[1]]), digits = digits),
                   print.gap = 2, quote = FALSE, ...)
   }else{

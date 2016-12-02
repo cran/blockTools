@@ -1,3 +1,10 @@
+Version 0.6-3 (2 December 2016)
+- Update assg2xBalance() to handle when factor names are characters as well as numbers.
+- Fix block() issue when reporting factor unit names
+- Fix block() to handle data frames stored as tibbles
+- NAMESPACE updates
+
+
 Version 0.6-2 (8 January 2015)
 - In block(), drop variables where variance is 0 overall and warn the user.
 - In block(), eliminate removal of blocking variables with 0 variance within a group, since scaling matrix is not caculated for each group.
@@ -5,6 +12,7 @@ Version 0.6-2 (8 January 2015)
 - Bug fixes and documentation editing for seqblock() and block2seqblock().
 - Updated Maintainer and Author affiliation.
 - Update title capitalization and replace require() libraries with :: to conform to Writing R Extensions guidelines.
+
 
 Version 0.6-1 (22 May 2014)
 *** New ***

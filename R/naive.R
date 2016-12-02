@@ -30,7 +30,7 @@ naive <- function(x, block.vars, id.vars, vcov, n.tr, l2, l1names, valid, validv
               ismahal = as.integer(ismahal),
               result = integer(p * n.tr), 
               p = as.integer(p))
-    
+
     result <- data.frame(matrix(out$result, ncol=(n.tr), byrow = TRUE), out$pairdist)
   }
   return(result)

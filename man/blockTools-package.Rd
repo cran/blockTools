@@ -15,8 +15,8 @@ treatment conditions. Write outputs to .tex and .csv files.
 \tabular{ll}{
 Package: \tab blockTools\cr
 Type: \tab Package\cr
-Version: \tab 0.6-2\cr
-Date: \tab 2015-01-08\cr
+Version: \tab 0.6-3\cr
+Date: \tab 2016-12-02\cr
 License: \tab  GPL (>=2)\cr
 }
 Given raw data, \code{block} creates experimental blocks,
@@ -30,8 +30,9 @@ Ryan T. Moore \email{rtm@american.edu} and Keith Schnakenberg \email{keith.schna
 
 Maintainer: Ryan T. Moore \email{rtm@american.edu}
 }
+
 \references{
-\url{http://ryantmoore.com/software.blockTools.htm}
+\url{http://www.ryantmoore.org/html/software.blockTools.html}
 }
 
 \keyword{ package }

@@ -31,6 +31,10 @@ the data.  Respecify 'row.sort'.")
   if(is.matrix(data)){
     data <- as.data.frame(data)
   }
+  
+  if(is.tibble(data)){
+    data <- as.data.frame(data)
+  }
  
   if(is.null(block.vars)){
     block.vars <- names(data)[!(names(data) %in% c(id.vars, groups))]
@@ -141,9 +145,14 @@ the data.  Respecify 'row.sort'.")
       cat("Blocking group ", i, "\n")
     }
     
-    data.gp <- data[data[, groups]==i, c(id.vars, block.vars)]
+    data.gp <- data[data[, groups] == i, c(id.vars, block.vars)]
 
     level.one.names <- data.gp[, id.vars[1]]
+    
+    ## Change factor names to character strings:
+    if(is.factor(level.one.names)){
+      level.one.names <- as.character(level.one.names)
+    }
     
     if(level.two == TRUE){
       if(length(id.vars) < 2){
@@ -152,8 +161,8 @@ identified.  Specify a second ID variable and re-block.")
       }
       row.names(data.gp) <- data.gp[, id.vars[2]]
     }else{
-      if(length(unique(data.gp[,id.vars[1]])) !=
-         length(data.gp[,id.vars[1]])){
+      if(length(unique(data.gp[, id.vars[1]])) !=
+         length(data.gp[, id.vars[1]])){
         stop("Blocking requested at top level, but some units have
 identical values of the identification variable.  Respecify first
 identification variable and re-block.")

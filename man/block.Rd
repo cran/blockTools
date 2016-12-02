@@ -173,8 +173,9 @@ block be at least 10 units apart, but no more than 50 units apart, on
 variable \code{"b2"}.  As of version 0.5-3, variable restrictions are
 implemented in all algorithms except \code{optimal}.  Note that
 employing a variable restriction may result in fewer than the maximum
-possible number of blocks.  See
-\url{http://ryantmoore.com/software.blockTools.htm} for details.
+possible number of blocks.  See 
+\url{http://www.ryantmoore.org/html/software.blockTools.html} for details.
+
 
 If \code{namesCol = NULL}, then \dQuote{Unit 1},
 \dQuote{Unit 2}, \ldots are used.  If \code{level.two = FALSE}, then \code{namesCol} should be of length \code{n.tr}; if \code{level.two = TRUE}, then \code{namesCol} should be of length 2*\code{n.tr}, and in the order shown in the example below.

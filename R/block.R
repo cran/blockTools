@@ -32,7 +32,7 @@ the data.  Respecify 'row.sort'.")
     data <- as.data.frame(data)
   }
   
-  if(is.tibble(data)){
+  if(is_tibble(data)){
     data <- as.data.frame(data)
   }
  
@@ -42,7 +42,9 @@ the data.  Respecify 'row.sort'.")
   if(!is.null(namesCol)){
     if(level.two == FALSE && length(namesCol) != n.tr){
       stop("The length of namesCol should equal n.tr") 
-    }else if(level.two == TRUE && length(namesCol) != 2*n.tr){stop("When level.two == TRUE, the length of namesCol should equal 2*n.tr")}
+    }else if(level.two == TRUE && length(namesCol) != 2 * n.tr){
+      stop("When level.two == TRUE, the length of namesCol should equal 2 * n.tr")
+    }
   }
 
   ## subset appropriate columns for vcov calculation
@@ -57,17 +59,18 @@ the data.  Respecify 'row.sort'.")
     names(vcov.data) <- block.vars
   }
   
-  ## calculate variance using all groups' units
+  # calculate variance using all groups' units
   if(is.character(distance)){
-    ## Since mve and mcd require IQR != 0, check, warn, use nonresistant:
+    # Since mve and mcd require IQR != 0, check, warn, use nonresistant:
     if(distance %in% c("mve", "mcd")){
       iqr.idx <- 0
       while(iqr.idx < length(block.vars)){
         iqr.idx <- iqr.idx + 1
         iqr.tmp <- unname(quantile(vcov.data[, iqr.idx], c(.25, .75)))
         if(isTRUE(all.equal(iqr.tmp[1], iqr.tmp[2]))){
-          #print(colnames(vcov.data))
-          warning(paste("Variable ", colnames(vcov.data)[iqr.idx], " has IQR 0; blocking will proceed using nonresistant Mahalanobis distance scaling matrix.", sep = ""))
+          
+          warning(paste("Variable ", colnames(vcov.data)[iqr.idx], 
+                        " has IQR 0; blocking will proceed using nonresistant Mahalanobis distance scaling matrix.", sep = ""))
           distance <- "mahalanobis"
           iqr.idx <- length(block.vars)
         }
@@ -75,7 +78,7 @@ the data.  Respecify 'row.sort'.")
     }
     
     if(distance == "mahalanobis"){
-      ## Cut variables with no variation at all:
+      # Cut variables with no variation at all:
       blvar.cut <- NULL
       for(blvar.idx in 1:length(block.vars)){
         if(isTRUE(all.equal(var(vcov.data[, block.vars[blvar.idx]]), 0))){
@@ -83,21 +86,25 @@ the data.  Respecify 'row.sort'.")
         }
       }
       if(length(blvar.cut) != 0){
-        warning(paste("The following blocking variables have zero variance and are dropped: ", paste(block.vars[blvar.cut], collapse = ", "), sep = ""))
+        
+        warning(paste("The following blocking variables have zero variance and are dropped: ", 
+                      paste(block.vars[blvar.cut], collapse = ", "), sep = ""))
+        
         block.vars <- block.vars[-(blvar.cut)]
       }
       
-      ## After cutting variables w/o variation, redefine vcov.data:
+      # After cutting variables w/o variation, redefine vcov.data:
       vcov.data <- vcov.data[, block.vars]
-      ## Calculate vcov matrix for Mahalanobis scaling:
+      
+      # Calculate vcov matrix for Mahalanobis scaling:
       vc.all <- var(vcov.data)
     }
     
     if(distance == "mcd"){
-      vc.all <- cov.rob(vcov.data, method="mcd", seed = seed.dist, ...)$cov
+      vc.all <- cov.rob(vcov.data, method = "mcd", seed = seed.dist, ...)$cov
     }
     if(distance == "mve"){
-      vc.all <- cov.rob(vcov.data, method="mve", seed = seed.dist, ...)$cov
+      vc.all <- cov.rob(vcov.data, method = "mve", seed = seed.dist, ...)$cov
     }
     if(distance == "euclidean"){
       vc.all <- diag(ncol(vcov.data))
@@ -117,13 +124,13 @@ the data.  Respecify 'row.sort'.")
       }
     }
     
-    vc.all <- solve(t(solve(t(chol(vc.all))))%*%weight%*%solve(t(chol(vc.all))))
+    vc.all <- solve(t(solve(t(chol(vc.all)))) %*% weight %*% solve(t(chol(vc.all))))
   }
   
-  ## counter for groups
+  # counter for groups
   gp <- 0
   
-  ## list of output for every group
+  # list of output for every group
   out <- list()  
   
   if(is.null(groups)){
@@ -136,7 +143,7 @@ the data.  Respecify 'row.sort'.")
   }
   gp.names <- unique(data[, groups])
   
-  ## perform blocking w/in groups
+  # perform blocking w/in groups
   for(i in unique(data[, groups])){ 
     
     gp <- gp + 1  
@@ -149,7 +156,7 @@ the data.  Respecify 'row.sort'.")
 
     level.one.names <- data.gp[, id.vars[1]]
     
-    ## Change factor names to character strings:
+    # Change factor names to character strings:
     if(is.factor(level.one.names)){
       level.one.names <- as.character(level.one.names)
     }
@@ -172,7 +179,6 @@ identification variable and re-block.")
     data.block <- data.frame(data.gp[, !(names(data.gp) %in% id.vars)])
     
     if(is.null(valid.var)){
-      
       valid <- 0
       validvar <- numeric(1)
       validlb <- numeric(1)
@@ -180,16 +186,18 @@ identification variable and re-block.")
     }
     else{
       if(is.null(valid.range)){
-        stop("A valid.var has been specified, but the valid.range has not.  Specify both or neither and re-block.")
+        stop("A valid.var has been specified, but the valid.range has not.  
+             Specify both or neither and re-block.")
       }
       valid <- 1
-      validvar <- data.gp[,valid.var]
+      validvar <- data.gp[, valid.var]
       validlb <- valid.range[1]
       validub <- valid.range[2]
     }
   
     if(!is.character(distance)){
-            dist.mat <- distance[data[, groups] == i, data[, groups] == i]
+            dist.mat <- distance[data[, groups] == i, 
+                                 data[, groups] == i]
     }else{
       nnn <- sum(as.integer(data[, groups] == i))
       dist.mat <- matrix(0, nrow = nnn, ncol = nnn)
@@ -237,7 +245,10 @@ identification variable and re-block.")
 #      }
 #      require("nbpMatching")
     	 if(n.tr > 2){
-    	  warning("You specified algorithm = optimal and n.tr > 2.  However, optimal blocking only implemented for exactly two treatment conditions.  If no other error is encountered, optimal blocks for n.tr = 2 are returned here.")
+    	  warning("You specified algorithm = optimal and n.tr > 2.  However, 
+    	          optimal blocking only implemented for exactly two treatment 
+    	          conditions.  If no other error is encountered, optimal blocks 
+    	          for n.tr = 2 are returned here.")
     	 }
       if(is.character(distance)){
         dist.mat <- mahal(data.block, vc.all)
@@ -251,12 +262,15 @@ identification variable and re-block.")
         valid.vec <- (valid.range[1] <= diffs) & (diffs <= valid.range[2])
       }
 
-      dist.mat <- matrix(as.integer(optfactor*dist.mat),
+      dist.mat <- matrix(as.integer(optfactor * dist.mat),
                          nrow = nrow(dist.mat),
                          ncol = ncol(dist.mat))
+      
       if(!is.null(valid.var)){
-      	warning("You specified algorithm = optimal and valid.var.  However, valid.var and valid.range are only implemented for other algorithms.  If no other error is encountered, optimal blocks ignoring the restriction are returned here.")
-        ##dist.mat[!valid.vec] <- 2147483647 #maximum 32 bit integer
+      	warning("You specified algorithm = optimal and valid.var.  
+      	        However, valid.var and valid.range are only implemented for other algorithms. 
+      	        If no other error is encountered, optimal blocks ignoring the restriction are returned here.")
+        # dist.mat[!valid.vec] <- 2147483647 # maximum 32 bit integer
       }
 
       optimalDistanceMatrix <- nbpMatching::distancematrix(dist.mat)
@@ -311,19 +325,22 @@ identification variable and re-block.")
       storage <- storage[, odd.col]
     }
     
-    ## Sort storage by max distance:
+    # Sort storage by max distance:
     if(nrow(storage) > 1){
       o <- order(as.numeric(as.character(storage[, ncol(storage)])),
                  storage[, 1])
       storage <- data.frame(storage[o,], check.names = FALSE)
     }
     
-    ## Add rows containing unblocked units in group = gp:
+    # Add rows containing unblocked units in group = gp:
     tmp.names <- unique(unlist(storage[, 1:(ncol(storage)-1)]))
     left.out.names <- level.one.names[!(level.one.names %in% tmp.names)]  
     len.lon <- length(left.out.names)
     if(len.lon > 0){
-      left.out.df <- as.data.frame(matrix(c(left.out.names, rep(NA, len.lon*(ncol(storage)-1))), len.lon, ncol(storage))) 
+      left.out.df <- as.data.frame(matrix(c(left.out.names, 
+                                            rep(NA, len.lon * (ncol(storage) - 1))), 
+                                          len.lon, 
+                                          ncol(storage))) 
       names(left.out.df) <- names(storage)
       storage.tmp <- data.frame(rbind(storage, left.out.df))
       names(storage.tmp) <- names(storage)
@@ -334,16 +351,18 @@ identification variable and re-block.")
         names(storage)[1:(ncol(storage) - 1)] <- namesCol
     }
    
-    ## function to count NA, to remove empty rows (for valid.var)
+    # function to count NA, to remove empty rows (for valid.var)
     sum.na <- function(sum.na.vector){return(sum(is.na(sum.na.vector)))}
-    ## remove empty rows
-    storage <- storage[apply(storage[, 1:(ncol(storage)-1)], 1, sum.na) != (ncol(storage)-1), ]
+    
+    # remove empty rows
+    storage <- storage[apply(storage[, 1:(ncol(storage) - 1)], 1, sum.na) != (ncol(storage) - 1), ]
     rownames(storage) <- 1:(nrow(storage))
     out[[gp]] <- storage
   } 
   
   names(out) <- gp.names
-  ## sort out by group names
+  
+  # sort out by group names
   o <- order(names(out))
   out <- out[o]
   

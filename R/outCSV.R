@@ -1,6 +1,6 @@
 outCSV <- function(block.obj, namesCol = NULL, file.names = NULL, digits = 2, ...){
 
-  ## takes block, assignment, or diagnose object
+  # takes block, assignment, or diagnose object
   if(!is.null(block.obj$blocks)){ 
     block.obj <- block.obj$blocks
   }

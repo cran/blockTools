@@ -8,5 +8,5 @@ int findMin2(double *dist, int ncol, int i);
 double * eliminate(int i, double *vec, int nrow);
 int cmpfunc(int a, int b);
 int getElem(int x, int y);
-double maxDist(double *dist, int *matches, int num);
+double maxDist(double *dist, unsigned int *matches, int num);
 double * eliminatePairDist(int i, int j, double *vec);

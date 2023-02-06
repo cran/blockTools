@@ -22,12 +22,12 @@ strings.  See documentation and respecify id.vars.")
 
   lev <- length(id.vars)
 
-####  for(i in 1:length(object)){  
   for(i in 1:length(object$assg)){  
-    ## assignment object
-    ####assg.gp <- object[[i]]
+    
+    # assignment object
     assg.gp <- as.matrix(object$assg[[i]])
-    ## data from group
+    
+    # data from group
     data.gp <- data.diag[data.diag[,id.vars[lev]] %in%
                          as.matrix(assg.gp),]
 
@@ -73,7 +73,7 @@ strings.  See documentation and respecify id.vars.")
 
       tmp.dup <- NULL
       if(!is.null(nrow(storage))){
-        ## cut duplicates
+        # cut duplicates
         tmp.dup <- rep(TRUE, nrow(storage))
         for(ll in 1:(nrow(storage)-1)){
           for(mm in (ll+1):nrow(storage)){
@@ -97,18 +97,18 @@ strings.  See documentation and respecify id.vars.")
     }
 
     if(!is.null(nrow(storage))){
-      ## renumber rows
+      # renumber rows
       rownames(storage) <- 1:nrow(storage)
-      ## order columns by value
-      tmp1 <- storage[,1:lev]
-      storage[,1:lev] <- storage[,(lev+1):(2*lev)]
-      storage[,(lev+1):(2*lev)] <- tmp1
-      ## sort rows, ascending by distance
-      o <- order(storage[,ncol(storage)])
-      storage <- storage[o,]
-      ## name rows
+      # order columns by value
+      tmp1 <- storage[, 1:lev]
+      storage[, 1:lev] <- storage[, (lev+1):(2*lev)]
+      storage[, (lev+1):(2*lev)] <- tmp1
+      # sort rows, ascending by distance
+      o <- order(storage[, ncol(storage)])
+      storage <- storage[o, ]
+      # name rows
       rownames(storage) <- 1:nrow(storage)
-      ## name columns
+      # name columns
       names(storage)[ncol(storage)] <- "Difference"
       reps <- floor(ncol(storage)/2)
       names(storage)[1:(ncol(storage)-1)] <- rep(paste("Unit ",

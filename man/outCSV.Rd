@@ -34,21 +34,23 @@ blocked or assigned units.}
 \examples{
 data(x100)
 
-## First, block
+# First, block
 out <- block(x100, groups = "g", n.tr = 2, id.vars = c("id"), block.vars
              = c("b1", "b2"), algorithm="optGreedy", distance =
              "mahalanobis", level.two = FALSE, valid.var = "b1",
              valid.range = c(0,500), verbose = TRUE)
-## Second, assign
+# Second, assign
 assg <- assignment(out, seed = 123)
 
-## create three .csv files of blocks
-outCSV(out)
-## create three .csv files of assigned blocks
-##   (note: overwrites blocked .csv files)
-outCSV(assg)
-## create three .csv files with custom file names
-outCSV(assg, file.names = list("file1", "file2", "file3"))
+# create three .csv files of blocks
+\dontrun{outCSV(out)}
+
+# create three .csv files of assigned blocks
+#   (note: overwrites blocked .csv files)
+\dontrun{outCSV(assg)}
+
+# create three .csv files with custom file names
+\dontrun{outCSV(assg, file.names = list("file1", "file2", "file3"))}
 }
 
 \keyword{design}

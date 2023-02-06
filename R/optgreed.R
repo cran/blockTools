@@ -1,11 +1,14 @@
-optgreed <- function(x, block.vars, id.vars, vcov, n.tr, l2, l1names, valid, validvar, validlb, validub, verbose, ismahal, dist){
+optgreed <- function(x, block.vars, id.vars, vcov, n.tr, l2, l1names, 
+                     valid, validvar, validlb, validub, verbose, ismahal, dist){
+  
   vcd <- as.matrix(x[, block.vars])
+  
   if(nrow(vcd) == 1){
     result <- data.frame(matrix(c(x[, id.vars], rep(NA, n.tr)), ncol = n.tr + 1))
   }
   else{
     vcovi <- solve(vcov)
-    if(is.numeric(validvar) && length(validvar)==1){
+    if(is.numeric(validvar) && length(validvar) == 1){
       p = (length(unique(l1names)) %/% n.tr) + as.integer((length(unique(l1names)) %% n.tr) > 0)
     }
     else{
@@ -30,7 +33,11 @@ optgreed <- function(x, block.vars, id.vars, vcov, n.tr, l2, l1names, valid, val
               ismahal = as.integer(ismahal),
               result = integer(p * n.tr),
               p = as.integer(p))
-    result <- data.frame(matrix(out$result, ncol=(n.tr), byrow=TRUE), out$pairdist)
+    result <- data.frame(matrix(out$result, 
+                                ncol = n.tr, 
+                                byrow=TRUE), 
+                         out$pairdist)
   }
+  
   return(result)
 }

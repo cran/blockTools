@@ -1,8 +1,7 @@
-outTeX <- function(block.obj, namesCol = NULL, file.names = NULL, captions = NULL, digits = 2, ...){
+outTeX <- function(block.obj, namesCol = NULL, file.names = NULL, 
+                   captions = NULL, digits = 2, ...){
 
-  #require("xtable")
-  
-  ## takes block, assignment, or diagnose object
+  # takes block, assignment, or diagnose object
   if(!is.null(block.obj$blocks)){ 
     block.obj <- block.obj$blocks
   }
@@ -22,7 +21,7 @@ outTeX <- function(block.obj, namesCol = NULL, file.names = NULL, captions = NUL
 
     ncol.tab <- ncol(tab)
     
-    ## user-specified column names
+    # user-specified column names
     if(!is.null(namesCol)){
       names(tab) <- namesCol
     }
@@ -35,9 +34,9 @@ outTeX <- function(block.obj, namesCol = NULL, file.names = NULL, captions = NUL
     	lab <- paste("t:", file.names[[i]], sep = "")
     }
     
-    tab.tex <- xtable::xtable(tab, label = lab, caption = caption, align =
-                      c(rep("c",ncol(tab)+1)), 
-                      digits = rep(digits, ncol(tab)+1), ...)
+    tab.tex <- xtable::xtable(tab, label = lab, caption = caption, 
+                              align = c(rep("c",ncol(tab)+1)), 
+                              digits = rep(digits, ncol(tab)+1), ...)
                                             
     print(tab.tex, file = file.name, caption.placement = "bottom")
   }

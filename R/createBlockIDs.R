@@ -12,7 +12,7 @@ createBlockIDs <- function(obj, data, id.var){
   row.n <- nrow(obj.simp)
   bbb <- rep(NA, nrow(data)) 
   
-  for(col.idx in 1:(ncol(obj.simp)-1)){ ## only for level.two == FALSE
+  for(col.idx in 1:(ncol(obj.simp) - 1)){ # only for level.two == FALSE
     tmp.colname <- paste("col", col.idx, sep = "")
     assign(tmp.colname, obj.simp[, col.idx])   
     tmp.col <- get(tmp.colname)

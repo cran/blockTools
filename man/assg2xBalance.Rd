@@ -41,7 +41,9 @@ Experiments". \emph{Political Analysis}, 20(4):460--479, Autumn.
 
 \author{Ryan T. Moore}
 
-\seealso{\code{\link{assignment}}}
+\seealso{
+  \code{\link{assignment}}.
+}
 
 \examples{
 data(x100)
@@ -49,7 +51,8 @@ b <- block(x100, groups = "g", id.vars = "id", block.vars = c("b1", "b2"))
 a <- assignment(b)
 axb <- assg2xBalance(a, x100, id.var = "id", bal.vars = c("b1", "b2"))
 axb
-## axb is a list with 4 elements (one for each of 3 groups, plus one for 'Overall')
+
+# axb is a list with 4 elements (one for each of 3 groups, plus one for 'Overall')
 }
 
 \keyword{design}

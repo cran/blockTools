@@ -1,15 +1,15 @@
 seqblock <- function(object = NULL, id.vars, id.vals, exact.vars = NULL, exact.vals = NULL, exact.restr = NULL, exact.alg = "single", covar.vars = NULL, covar.vals = NULL, covar.restr = NULL, covars.ord = NULL, n.tr = 2, tr.names = NULL, assg.prob = NULL, seed = NULL, seed.dist, assg.prob.stat = NULL, trim = NULL, assg.prob.method = NULL, assg.prob.kfac = NULL, distance = NULL, file.name = NULL, query = FALSE, verbose = TRUE, ...){
   
   if(is.null(object)){
-    if(query==TRUE){
+    if(query == TRUE){
       init <- readline("Is this the first unit that is being assigned in this experiment?  [y/n]  ")     
-      if(!(substr(init,1,1) %in% c("y", "n"))){    
+      if(!(substr(init, 1, 1) %in% c("y", "n"))){    
         ddd <- readline("The default is `yes'.  Continue? [y/n]  ")
         if(substr(ddd, 1, 1) != "n"){
           init <- "y"
         }else(stop("The seqblock function requires the ''object'' argument to be set to a valid file name for subsequent unit assignment."))
       }
-      if(substr(init,1,1) == "n"){
+      if(substr(init, 1, 1) == "n"){
         object <- readline("Enter the name of the input file without quotation marks.  [E.g., sbout1.RData]  ")
       }
     }
@@ -32,7 +32,7 @@ seqblock <- function(object = NULL, id.vars, id.vals, exact.vars = NULL, exact.v
       } ## End loop over ID variables
       
       nnn <- readline("Should the ID values be numeric? [y/n]  ")
-      if(!(substr(nnn,1,1) %in% c("y", "n"))){ 
+      if(!(substr(nnn, 1, 1) %in% c("y", "n"))){ 
         ddd <- readline("The default is `yes'.  Continue? [y/n]  ")
         if(substr(ddd, 1, 1) != "n"){
         }else{
@@ -44,14 +44,14 @@ seqblock <- function(object = NULL, id.vars, id.vals, exact.vars = NULL, exact.v
       }
       if(sum(is.na(id.vals)) > 0){ # If there is at least one missing value in id.vals, 
         tmp <- readline(cat("Warning: ID value(s)", which(is.na(id.vals)), "was/were coerced to and stored as `NA'.  Proceed? [y/n] ", sep=" "))
-        if(!(substr(tmp,1,1) %in% c("y", "n"))){
+        if(!(substr(tmp, 1, 1) %in% c("y", "n"))){
           ddd <- readline("The default is `yes'.  Continue? [y/n]  ")
           if(substr(ddd, 1, 1) != "n"){
           }else{
             tmp <- readline(cat("Warning: ID value(s)", which(is.na(id.vals)), "was/were coerced to and stored as `NA'.  Proceed? [y/n] ", sep=" "))  			   
           }
         }
-        if(substr(tmp,1,1) == "n"){
+        if(substr(tmp, 1, 1) == "n"){
           stop()
         }
       }
@@ -900,7 +900,7 @@ seqblock <- function(object = NULL, id.vars, id.vals, exact.vars = NULL, exact.v
       }
     } ## End 'if(lcv > 0)'
     
-    if(lcv == 0){ ## if there are ONLY exact covariates used:
+    if(lcv == 0){ # if there are ONLY exact covariates used:
       tr.dist <- list()
       tr.sort <- character()      
       tr.counts <- table(x.ex$Tr)
@@ -910,11 +910,12 @@ seqblock <- function(object = NULL, id.vars, id.vals, exact.vars = NULL, exact.v
         names(tr.counts)[(n.tr-length(trn.unassg)+1):n.tr] <- trn.unassg
       }
       p.lcv0 <- (1-tr.counts/sum(tr.counts))/sum(1-tr.counts/sum(tr.counts))
-    } ## End 'if(lcv == 0)'
+    } # End 'if(lcv == 0)'
     
-    ## Set assignment probability method
+    # Set assignment probability method
     if(apmeth == "ktimes"){
-      p <- 	c(kfac/(kfac+n.tr-1), rep(1/(kfac+n.tr-1), n.tr-1))
+      p <- 	c(kfac/(kfac + n.tr - 1), 
+              rep(1 / (kfac + n.tr - 1), n.tr - 1))
     }
     
     if(apmeth=="fixed"){
@@ -926,16 +927,16 @@ seqblock <- function(object = NULL, id.vars, id.vals, exact.vars = NULL, exact.v
       }
       p <- assgpr
     }		
-    if(apmeth=="prop"){
+    if(apmeth == "prop"){
       mssum <- sapply(ms, sum)
       p <- c(unname((mssum/sum(mssum))[tr.sort]))       
     }			 
-    if(apmeth =="prop2"){  
+    if(apmeth == "prop2"){  
       sumsq <- sapply(ms, sum)^2
       p <- c(unname((sumsq/sum(sumsq))[tr.sort]))
     }
-    ## Biases toward tr's w/fewer units
-    if(apmeth=="wprop"){
+    # Biases toward tr's w/fewer units
+    if(apmeth == "wprop"){
       nnnj <- lapply(tr.dist, length)
       nnn <- sum(unlist(nnnj))
       div.func <- function(x){return(nnn/x)}
@@ -944,25 +945,25 @@ seqblock <- function(object = NULL, id.vars, id.vals, exact.vars = NULL, exact.v
       p <- c(unname((wdist/sum(wdist))[tr.sort]))
     }
     
-    ## set user-assigned seed
+    # set user-assigned seed
     if(!is.null(seed)){
       set.seed(seed)
     }
     
-    ## Assign new TR, given at least 1 "treated as continuous" covars
+    # Assign new TR, given at least 1 "treated as continuous" covars
     if(lcv > 0){
       tr.new <- sample(tr.sort, 1, prob=p)
     }
-    ## Assign new TR using correct order for probs and Tr condition names, EXACT covars only
+    # Assign new TR using correct order for probs and Tr condition names, EXACT covars only
     if(lcv == 0){
       tr.new <- sample(names(tr.counts), 1, prob=p.lcv0)
     }
-    ## Assign new TR using same order for fixed probs and Tr condition names
+    # Assign new TR using same order for fixed probs and Tr condition names
     if(apmeth == "fixed"){
       tr.new <- sample(trn, 1, prob=p)
     }
     
-    ## Append to x
+    # Append to x
     x <- rbind(x, c(qqq[nrow(qqq),], Tr=tr.new))
     orig[nrow(orig),"Tr"] <- tr.new
     tr.counts <- table(x$Tr)
@@ -977,27 +978,27 @@ seqblock <- function(object = NULL, id.vars, id.vals, exact.vars = NULL, exact.v
     
     prev.dates <- bdata$datetime
     
-    ## Create storage list 
+    # Create storage list 
     bdata <- list()
     bdata$x <- x
     bdata$nid <- nid
     bdata$nex <- nex
     bdata$ncv <- ncv
-    bdata$rex <- rex  ## EXACT restricted values list
+    bdata$rex <- rex  # EXACT restricted values list
     if(!is.null(bdata$rex)){
       names(bdata$rex) <- nex    
     }
-    bdata$rcv <- rcv  ## BLOCK restricted values list
+    bdata$rcv <- rcv  # BLOCK restricted values list
     if(!is.null(bdata$rcv)){
       names(bdata$rcv) <- covar.vars
     }  
-    bdata$ocv <- ocv  ## block covariates order
+    bdata$ocv <- ocv  # block covariates order
     bdata$trn <- trn
-    bdata$apstat <- apstat ## assignment prob statistic
-    bdata$mtrim <- mtrim ## trim fraction for apmeth=trimmean
-    bdata$apmeth <- apmeth ## assignment prob method
-    bdata$kfac <- kfac     ## assg probs for method=ktimes
-    bdata$assgpr <- assgpr ## assg probs for fixed prob
+    bdata$apstat <- apstat # assignment prob statistic
+    bdata$mtrim <- mtrim # trim fraction for apmeth=trimmean
+    bdata$apmeth <- apmeth # assignment prob method
+    bdata$kfac <- kfac     # assg probs for method=ktimes
+    bdata$assgpr <- assgpr # assg probs for fixed prob
     bdata$distance <- dist ## distance calculation method
     bdata$trd <- tr.dist
     bdata$tr.sort <- tr.sort
@@ -1017,7 +1018,7 @@ seqblock <- function(object = NULL, id.vars, id.vals, exact.vars = NULL, exact.v
       cat("The new data as entered:\n")
       print(orig[nrow(orig), ])
     }	
-  } ## End 'if(!is.null(object))'
+  } # End 'if(!is.null(object))'
   
   return(bdata)
 }

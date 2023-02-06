@@ -144,7 +144,7 @@ int getElem(int x, int y)
     return out;
 }
 
-double maxDist(double *dist, int *matches, int num)
+double maxDist(double *dist, unsigned int *matches, int num)
 {
     unsigned i, j;
     double mymax=0;

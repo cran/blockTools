@@ -15,7 +15,7 @@ naive <- function(x, block.vars, id.vars, vcov, n.tr, l2, l1names,
       p = nrow(x)
     }
     
-    out <- .C("naive",
+    out <- .C("naive_c",
               data = as.double(vcd),
               vec = as.double(dist[row(dist) < col(dist)]),
               nrow = as.integer(nrow(x)),

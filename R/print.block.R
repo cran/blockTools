@@ -1,3 +1,5 @@
+#' @export
+
 print.block <- function(x, digits = max(2, getOption("digits") - 4),
                         ...){
   cat("\nBlocks:\n\n")

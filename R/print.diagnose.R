@@ -1,3 +1,5 @@
+#' @export
+
 print.diagnose <- function(x, digits = max(2, getOption("digits") - 4),
                         ...){
   cat("\nUnits differing by at least ", x$suspect.range[1], " and no

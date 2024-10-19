@@ -7,8 +7,9 @@
 #include <stdlib.h>
 #include "util.h"
 #include "getDist.h"
+#include "naive.h"
 
-void naive(double *data,
+void naive_c(double *data,
 	   double *distvec,
 	   int *nrow,
 	   int *ncol,
@@ -33,7 +34,8 @@ void naive(double *data,
   
   
   unsigned n = choose(*nrow, 2), i;
-  double *vec=Calloc(n, double), *vec2=Calloc(n, double);
+  double *vec = calloc(n, sizeof(double)); 
+  double *vec2 = calloc(n, sizeof(double));
   
   /* Compute distances between all units */
   if(*ismahal==1)

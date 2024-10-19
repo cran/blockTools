@@ -1,3 +1,5 @@
+#' @export
+
 print.assg <- function(x, digits = max(2, getOption("digits") - 4),
                         ...){
   cat("\nAssignments:\n\n")

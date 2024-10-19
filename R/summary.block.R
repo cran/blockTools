@@ -1,3 +1,5 @@
+#' @export
+
 summary.block.R <- function(object, ...){
 #  if(length(object$blocks)==1){
 #    cat("Number of Groups = 1\n")

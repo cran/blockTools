@@ -1,4 +1,4 @@
-useDynLib(blockTools)
+useDynLib(blockTools, .registration = TRUE)
 export( block,
         assignment,
         assg2xBalance,

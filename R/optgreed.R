@@ -15,7 +15,7 @@ optgreed <- function(x, block.vars, id.vars, vcov, n.tr, l2, l1names,
       p = nrow(x)
     }
   
-    out <- .C("optgreed",
+    out <- .C("optgreed_c",
               data = as.double(vcd),
               vec = as.double(dist[row(dist) < col(dist)]),
               nrow = as.integer(nrow(x)),

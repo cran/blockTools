@@ -1,3 +1,5 @@
+#' @export
+
 print.blockSum <- function(x, digits = max(2, getOption("digits") - 4),
                         ...){
 

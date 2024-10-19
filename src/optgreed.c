@@ -8,7 +8,7 @@
 #include "util.h"
 #include "getDist.h"
 
-void optgreed(double *data,
+void optgreed_c(double *data,
 	      double *distvec,
 	      int *nrow,
 	      int *ncol,
@@ -33,7 +33,8 @@ void optgreed(double *data,
 
 
   int n = choose(*nrow, 2);
-  double *vec=Calloc(n, double), *vec2=Calloc(n, double);
+  double *vec = calloc(n, sizeof(double));
+  double *vec2 = calloc(n, sizeof(double));
   unsigned i;
 
   /* Compute distances between all units */
@@ -61,7 +62,8 @@ void optgreed(double *data,
       /*       matching         */
       /*                        */
 
-  unsigned j, ii, k, cinf=n, mn[*ntr], t, J, K, niter;
+  unsigned j, k, mn[*ntr];
+  //unsigned ii, cinf=n, t J, K, niter;
   int check=-1;
   double md, min;
   for(j=0; j<*p; j++)

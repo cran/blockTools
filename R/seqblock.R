@@ -56,11 +56,11 @@
 #'   \item \strong{apmeth}: a string specifying the assignment probability algorithm that was used.
 #'   \item \strong{kfac}: the assignment probability \emph{kfactor}; see \emph{assg.prob.kfac} in the Arguments section above.
 #'   \item \strong{assgpr}: a vector of assignment probabilities to each treatment group.
-#'   \item \strong{distance}: a string specifying how the multivarite distance used for blocking was calculated. 
+#'   \item \strong{distance}: a string specifying how the multivariate distance used for blocking was calculated. 
 #'   \item \strong{trd}: a list with the length equal to the number of previously assigned treatment conditions; each object in the list contains a vector of the distance between each unit in one treatment group and the new unit. This will be \code{NULL} when there are no non-exact blocking variables.
 #'   \item \strong{tr.sort}: a string vector of treatment conditions, sorted from the largest to the smallest. Set to \code{NULL} when there are no non-exact blocking variables.
 #'   \item \strong{p}: a vector of assignment probabilities to each treatment group used in assigning a treatment condition to the new unit.
-#'   \item \strong{distance}: a string specifying how the multivarite distance used for blocking is calculated
+#'   \item \strong{distance}: a string specifying how the multivariate distance used for blocking is calculated
 #'   \item \strong{trcount}: a table containing the counts for each experimental/treatment conditions.
 #'   \item \strong{datetime}: the date and time at which each unit was assigned their treatment group.
 #'   \item \strong{orig}: a dataframe containing the names and values for the different id and blocking variables, as well as each unit's treatment assignment.

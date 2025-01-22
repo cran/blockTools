@@ -2,8 +2,8 @@ Package: blockTools
 Type: Package
 Title: Block, Assign, and Diagnose Potential Interference in Randomized
         Experiments
-Version: 0.6.5
-Date: 2024-10-19
+Version: 0.6.6
+Date: 2025-01-21
 Authors@R: c(person(c("Ryan", "T."), "Moore", 
                     email = "rtm@american.edu", 
                     comment = c(ORCID = "0000-0002-3916-8113"), 
@@ -19,9 +19,9 @@ Config/testthat/edition: 3
 URL: https://www.ryantmoore.org/html/software.blockTools.html
 RoxygenNote: 7.3.2
 NeedsCompilation: yes
-Packaged: 2024-10-19 21:50:16 UTC; rtm
+Packaged: 2025-01-21 16:37:19 UTC; rtm
 Author: Ryan T. Moore [aut, cre] (<https://orcid.org/0000-0002-3916-8113>),
   Keith Schnakenberg [aut]
 Maintainer: Ryan T. Moore <rtm@american.edu>
 Repository: CRAN
-Date/Publication: 2024-10-19 22:10:02 UTC
+Date/Publication: 2025-01-22 08:10:05 UTC

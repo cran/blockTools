@@ -1,12 +1,14 @@
 # blockTools
 R package for Design of Randomized Experiments
 
-`blockTools` blocks units into experimental blocks with one unit per treatment condition by creating a measure of multivariate distance between all possible pairs of units.  Users can set the maximum, minimum, or an allowable range of differences between units on one variable.  `blockTools` also randomly assigns units to treatment conditions, and can diagnose potential interference between units assigned to different treatment conditions.  Users can write outputs to `.tex` and `.csv` files.
+`blockTools` blocks units into experimental blocks with one unit per treatment condition by creating a measure of multivariate distance between all possible pairs of units. Users can set the maximum, minimum, or an allowable range of differences between units on one variable. `blockTools` also randomly assigns units to treatment conditions, and can diagnose potential interference between units assigned to different treatment conditions. Users can write outputs to `.tex` and `.csv` files.
 
 # Examples
 
-At the R prompt, type:
+After installation (see below), at the R prompt:
 ```
+library(blockTools)
+
 # load the example data: 
 data(x100) 
 
@@ -18,7 +20,7 @@ assg <- assignment(out)
 
 # detect unit pairs with different treatment assignments 
 #   that are within 1 unit of each other on variable "b1":
-diag <- diagnose(assg, x100, id.vars = "id", suspect.var = "b1", suspect.range = c(0,1)) 
+diag <- diagnose(assg, x100, id.vars = "id", suspect.var = "b1", suspect.range = c(0, 1)) 
 ```
 
 To view the results:

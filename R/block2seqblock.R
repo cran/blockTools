@@ -24,7 +24,7 @@
 #' @param apmeth a string specifying the assignment probability algorithm that was used.
 #' @param kfac the assignment probability \emph{kfactor}; see \emph{assg.prob.kfac} in the Arguments section above
 #' @param assgpr a vector of assignment probabilities to each treatment group
-#' @param distance a string specifying how the multivarite distance used for blocking is calculated
+#' @param distance a string specifying how the multivariate distance used for blocking is calculated
 #' @param datetime the date and time that the units were assigned to the treatment group; by default this is set to be a vector of NA; however the user could also specify a specific datetime and all of the units from the block object will be given the same datetime stamp
 #' @param orig a dataframe containing the names and values for the different id and blocking variables, as well as each unit's initial treatment assignment
 #' @param seed an optional integer value for the random seed set which is used when assigning units to treatment groups
@@ -47,7 +47,7 @@
 #'   \item \strong{apmeth}: a string specifying the assignment probability algorithm that was used.
 #'   \item \strong{kfac}: the assignment probability \emph{kfactor}; see \emph{assg.prob.kfac} in the Arguments section above.
 #'   \item \strong{assgpr}: a vector of assignment probabilities to each treatment group.
-#'   \item \strong{distance}: a string specifying how the multivarite distance used for blocking is calculated
+#'   \item \strong{distance}: a string specifying how the multivariate distance used for blocking is calculated
 #'   \item \strong{trd}: a list with the length equal to the number of previously assigned treatment conditions; each object in the list contains a vector of the distance between each unit in one treatment group and the new unit. Set to \code{NULL} when there are no non-exact blocking variables.
 #'   \item \strong{tr.sort}: a string vector of treatment conditions, sorted from the largest to the smallest
 #'   \item \strong{p}: a vector of assignment probabilities to each treatment group used in assigning a treatment condition to the new unit.

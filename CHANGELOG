@@ -1,8 +1,14 @@
+Version 0.6.6 (2025-01-21)
+
+- Fix more C integer types
+
+
 Version 0.6.5 (2024-10-19):
 
 - Register routines
 - Roxygenize documentation
 - Relocate package contents 
+
 
 Version 0.6.4 (2023-02-04):
 

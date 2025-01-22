@@ -68,7 +68,7 @@
 #' \itemize{
 #'   \item \strong{blocks}: a list of dataframes, each containing a group's blocked units. If there are two treatment conditions, then the last column of each dataframe displays the multivariate distance between the two units. If there are more than two treatment conditions, then the last column of each dataframe displays the largest of the multivariate distances between all possible pairs in the block.
 #'   \item \strong{level.two}: a logical indicating whether \code{level.two = TRUE}.
-#'   \item \strong{call}: the orginal call to \code{block}.
+#'   \item \strong{call}: the original call to \code{block}.
 #' }
 #' 
 #' @examples
@@ -85,7 +85,7 @@
 #' for(i in (1:nrow(x100))){if((i %% 2) == 0){x100$id[i] <- x100$id[i-1]}}
 #' 
 #' out2 <- block(x100, groups = "g", n.tr = 2, id.vars = c("id", "id2"),
-#'               block.vars = c("b1", "b2"), algorithm="optGreedy",
+#'               block.vars = c("b1", "b2"), algorithm = "optGreedy",
 #'               distance = "mahalanobis", level.two = TRUE, valid.var = "b1",
 #'               valid.range = c(0,500), namesCol = c("State 1", "City 1", 
 #'               "State 2", "City 2"), verbose = TRUE)
@@ -128,11 +128,11 @@ options.")
   if(algorithm == "sortGreedy"){
     if(is.null(row.sort)){
       stop("Blocking algorithm is 'sortGreedy', but vector of new row
-positions unspecified.  See documentation for details.")      
+positions unspecified. See documentation for details.")      
     }
     if(length(row.sort)!= nrow(data)){
       stop("Length of vector 'row.sort' does not equal number of rows in
-the data.  Respecify 'row.sort'.")
+the data. Respecify 'row.sort'.")
   }
     data <- data[row.sort, ]
   }
@@ -223,13 +223,13 @@ the data.  Respecify 'row.sort'.")
   if(!is.null(weight)){
     if(is.vector(weight)){
       if(length(weight) != ncol(vc.all)){
-        stop("Weight vector length must equal number of blocking variables.  Respecify 'weight'.")
+        stop("Weight vector length must equal number of blocking variables. Respecify 'weight'.")
   		 } 		  		
       weight <- diag(weight)
     }
     if(is.matrix(weight)){
            if(sum(dim(weight) == dim(vc.all)) != 2){
-      	stop("Weight matrix dimensions must equal number of blocking variables.  Respecify 'weight'.")
+      	stop("Weight matrix dimensions must equal number of blocking variables. Respecify 'weight'.")
       }
     }
     
@@ -273,7 +273,7 @@ the data.  Respecify 'row.sort'.")
     if(level.two == TRUE){
       if(length(id.vars) < 2){
         stop("Blocking requested at second level, but second level not
-identified.  Specify a second ID variable and re-block.")
+identified. Specify a second ID variable and re-block.")
       }
       row.names(data.gp) <- data.gp[, id.vars[2]]
     }else{
@@ -295,8 +295,7 @@ identification variable and re-block.")
     }
     else{
       if(is.null(valid.range)){
-        stop("A valid.var has been specified, but the valid.range has not.  
-             Specify both or neither and re-block.")
+        stop("A valid.var has been specified, but the valid.range has not. Specify both or neither and re-block.")
       }
       valid <- 1
       validvar <- data.gp[, valid.var]
@@ -326,10 +325,10 @@ identification variable and re-block.")
                          validlb = as.double(validlb),
                          validub = as.double(validub),
                          verbose = as.integer(verbose),
-                         ismahal=is.character(distance)
+                         ismahal = is.character(distance)
                          )
       }
-      else if(algorithm  %in%   c("naiveGreedy", "randGreedy", "sortGreedy")){
+      else if(algorithm %in% c("naiveGreedy", "randGreedy", "sortGreedy")){
         out1 <- naive(x = data.gp,
                       block.vars = block.vars,
                       id.vars = id.vars,
@@ -354,9 +353,9 @@ identification variable and re-block.")
 #      }
 #      require("nbpMatching")
     	 if(n.tr > 2){
-    	  warning("You specified algorithm = optimal and n.tr > 2.  However, 
+    	  warning("You specified algorithm = optimal and n.tr > 2. However, 
     	          optimal blocking only implemented for exactly two treatment 
-    	          conditions.  If no other error is encountered, optimal blocks 
+    	          conditions. If no other error is encountered, optimal blocks 
     	          for n.tr = 2 are returned here.")
     	 }
       if(is.character(distance)){
@@ -388,7 +387,9 @@ identification variable and re-block.")
                                         #      optimalOutput$halves[, 1] <- level.one.names[optimalOutput$halves[, 1]] 
                                         #      optimalOutput$halves[, 2] <- level.one.names[optimalOutput$halves[, 2]]
       out1 <- optimalOutput$halves
-      out1 <- data.frame("Unit 1" = out1$Group1.Row, "Unit 2" = out1$Group2.Row, "Distance" = out1$Distance)
+      out1 <- data.frame("Unit 1" = out1$Group1.Row, 
+                         "Unit 2" = out1$Group2.Row, 
+                         "Distance" = out1$Distance)
     }
 
     storage1 <- out1
@@ -397,7 +398,7 @@ identification variable and re-block.")
     count <- 1
 
     if(algorithm != "optimal"){
-      for(col.idx in 1:(ncol(out1)-1)){
+      for(col.idx in 1:(ncol(out1) - 1)){
         storage1$temp <- as.character(data.gp[storage1[, col.idx], id.vars[1]])
         storage1$temp2 <- as.character(data.gp[storage1[, col.idx], id.vars[length(id.vars)]])
         names(storage1)[ncol(out1) + count] <- paste("Unit", col.idx)
@@ -408,7 +409,7 @@ identification variable and re-block.")
     }
 
     else if(algorithm == "optimal"){
-      for(col.idx in 1:(ncol(out1)-1)){
+      for(col.idx in 1:(ncol(out1) - 1)){
         if(is.null(namesCol)){
           names(storage1)[col.idx] <- paste("Unit", col.idx)
         }else{
@@ -420,7 +421,7 @@ identification variable and re-block.")
     
     if(algorithm != "optimal"){
       storage1$Distance <- storage1[, ncol(out1)]
-      storage <- storage1[, (ncol(out1)+1):ncol(storage1)]
+      storage <- storage1[, (ncol(out1) + 1):ncol(storage1)]
     }
     else if(algorithm == "optimal"){
       storage <- storage1
@@ -429,7 +430,7 @@ identification variable and re-block.")
       names(storage)[ncol(storage)] <- "Max Distance"
     }
     odd.col <- seq(1:ncol(storage))[seq(1:ncol(storage))%%2 == 1]
-    even.col <- (odd.col+1)[1:(length(odd.col)-1)]
+    even.col <- (odd.col + 1)[1:(length(odd.col) - 1)]
     if(level.two == FALSE && algorithm != "optimal"){
       storage <- storage[, odd.col]
     }

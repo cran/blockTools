@@ -13,7 +13,7 @@ void optgreed_c(double *data,
 	      int *nrow,
 	      int *ncol,
 	      double *vcovi,
-	      unsigned int *ntr,
+	      int *ntr,  // Change from "unsigned int *ntr" to "int *ntr" for compatibility with the header file (optgreed.h)
 	      int *l2,
 	      int *l1names,
 	      int *valid,
@@ -108,7 +108,7 @@ void optgreed_c(double *data,
 
       for(k=2; k<*ntr; k++) 
 	{
-	  int whichMatch;
+	  int whichMatch = 0;
 	  md = HUGE_VAL;
 	  for(i=0; i<k; i++)
 	    {

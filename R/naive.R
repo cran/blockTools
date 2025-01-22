@@ -9,7 +9,8 @@ naive <- function(x, block.vars, id.vars, vcov, n.tr, l2, l1names,
   else{
     vcovi <- solve(vcov)
     if(is.numeric(validvar) && length(validvar)==1){
-      p = (length(unique(l1names)) %/% n.tr) + as.integer((length(unique(l1names)) %% n.tr) > 0)
+      p = (length(unique(l1names)) %/% n.tr) + 
+             as.integer((length(unique(l1names)) %% n.tr) > 0)
     }
     else{
       p = nrow(x)
@@ -35,7 +36,7 @@ naive <- function(x, block.vars, id.vars, vcov, n.tr, l2, l1names,
               p = as.integer(p))
     
     result <- data.frame(matrix(out$result, 
-                                ncol=(n.tr), 
+                                ncol = n.tr, 
                                 byrow = TRUE), 
                          out$pairdist)
 

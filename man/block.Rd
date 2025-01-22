@@ -67,7 +67,7 @@ A list with elements
 \itemize{
   \item \strong{blocks}: a list of dataframes, each containing a group's blocked units. If there are two treatment conditions, then the last column of each dataframe displays the multivariate distance between the two units. If there are more than two treatment conditions, then the last column of each dataframe displays the largest of the multivariate distances between all possible pairs in the block.
   \item \strong{level.two}: a logical indicating whether \code{level.two = TRUE}.
-  \item \strong{call}: the orginal call to \code{block}.
+  \item \strong{call}: the original call to \code{block}.
 }
 }
 \description{
@@ -128,7 +128,7 @@ out <- block(x100, groups = "g", n.tr = 2, id.vars = c("id"),
 for(i in (1:nrow(x100))){if((i \%\% 2) == 0){x100$id[i] <- x100$id[i-1]}}
 
 out2 <- block(x100, groups = "g", n.tr = 2, id.vars = c("id", "id2"),
-              block.vars = c("b1", "b2"), algorithm="optGreedy",
+              block.vars = c("b1", "b2"), algorithm = "optGreedy",
               distance = "mahalanobis", level.two = TRUE, valid.var = "b1",
               valid.range = c(0,500), namesCol = c("State 1", "City 1", 
               "State 2", "City 2"), verbose = TRUE)

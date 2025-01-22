@@ -81,7 +81,7 @@ int levelTwoCheck(int i, int j, int *l1names)
 
 int findMin2(double *dist, int nrow, int i)/* identify minimum distance to a particular unit */
 {
-    unsigned mm, ii, iii, tt=0, t;
+    unsigned mm, ii, /*iii,*/ tt=0, t;
     double md, r;
     
     mm = findMin(dist, tri(i-2), tri(i-1), tri(i-2)); /* check column */
